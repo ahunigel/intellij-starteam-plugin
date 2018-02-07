@@ -3,7 +3,7 @@
   <id>Starteam</id>
   <version>1.0</version>
   <vendor logo="/general/ijLogo.png">JetBrains</vendor>
-  <resource-bundle>com.intellij.vcs.starteam.StarteamBundle</resource-bundle>
+  <resource-bundle>StarteamBundle</resource-bundle>
   <category>VCS Integration</category>
   <depends>com.intellij.modules.vcs</depends>
   <depends>com.intellij.modules.ultimate</depends>
