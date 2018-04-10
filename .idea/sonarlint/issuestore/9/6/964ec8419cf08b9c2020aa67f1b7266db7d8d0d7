@@ -1,20 +1,0 @@
-
-qsquid:S2068"U'PASSWORD' detected in this expression, review this potentially hardcoded credential.(Å«ƒ’8¿°À†—,
-…"squid:ClassVariableVisibilityCheck"RMake SERVER a static final constant or non-public and provide accessors if needed.(õ¿ÑÅ8¿°À†—,
-ˆ"squid:ClassVariableVisibilityCheck"PMake PORT a static final constant or non-public and provide accessors if needed.(ùÔ¸İÿÿÿÿÿ8¿°À†—,
-ƒ"squid:ClassVariableVisibilityCheck"PMake USER a static final constant or non-public and provide accessors if needed.(‡ôÄ¦8¿°À†—,
-‡"squid:ClassVariableVisibilityCheck"TMake PASSWORD a static final constant or non-public and provide accessors if needed.(Å«ƒ’8¿°À†—,
-‹"squid:ClassVariableVisibilityCheck"SMake PROJECT a static final constant or non-public and provide accessors if needed.(³®×õıÿÿÿÿ8¿°À†—,
-ˆ"squid:ClassVariableVisibilityCheck"PMake VIEW a static final constant or non-public and provide accessors if needed.(¥»½úÿÿÿÿ8¿°À†—,
-—"squid:ClassVariableVisibilityCheck"dMake ALTERNATIVE_WORKING_PATH a static final constant or non-public and provide accessors if needed.(­„şÀ8¿°À†—,
-”"squid:ClassVariableVisibilityCheck"\Make LOCK_ON_CHECKOUT a static final constant or non-public and provide accessors if needed.(ÛºÖëùÿÿÿÿ8¿°À†—,
-"squid:ClassVariableVisibilityCheck"]Make UNLOCK_ON_CHECKIN a static final constant or non-public and provide accessors if needed.(ê¦¬8¿°À†—,
-nsquid:S00116"QRename this field "SERVER" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(õ¿ÑÅ8¿°À†—,
-qsquid:S00116"ORename this field "PORT" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ùÔ¸İÿÿÿÿÿ8¿°À†—,
-lsquid:S00116"ORename this field "USER" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‡ôÄ¦8¿°À†—,
-psquid:S00116"SRename this field "PASSWORD" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Å«ƒ’8¿°À†—,
-tsquid:S00116"RRename this field "PROJECT" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(³®×õıÿÿÿÿ8¿°À†—,
-qsquid:S00116"ORename this field "VIEW" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¥»½úÿÿÿÿ8¿°À†—,
-€squid:S00116"cRename this field "ALTERNATIVE_WORKING_PATH" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(­„şÀ8¿°À†—,
-}squid:S00116"[Rename this field "LOCK_ON_CHECKOUT" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÛºÖëùÿÿÿÿ8¿°À†—,
-ysquid:S00116"\Rename this field "UNLOCK_ON_CHECKIN" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ê¦¬8¿°À†—,

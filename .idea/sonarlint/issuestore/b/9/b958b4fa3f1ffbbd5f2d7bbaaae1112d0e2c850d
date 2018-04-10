@@ -1,6 +1,0 @@
-
-X
-squid:S899"=Do something with the "boolean" value returned by "renameTo".(Õ†¨†8²øö‰—,
-_squid:S1155">Use isEmpty() to check whether the collection is empty or not.(Ğ³´Ôøÿÿÿÿ8²øö‰—,
-ssquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(«ÿè˜ùÿÿÿÿ8²øö‰—,
-squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(†øŸú8²øö‰—,

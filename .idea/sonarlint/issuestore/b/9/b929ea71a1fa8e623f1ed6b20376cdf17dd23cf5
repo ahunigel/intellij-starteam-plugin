@@ -1,52 +1,0 @@
-
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ù«ëäýÿÿÿÿ8­þä‰—,
-•squid:S1319"tThe type of the "renamedFiles" object should be an interface such as "Map" rather than the implementation "HashMap".(¢Âå¾üÿÿÿÿ8¹˜†—,
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÆÎÝýÿÿÿÿ8­þä‰—,
-squid:S1149"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(ÍÓæè8­þä‰—,
-Gsquid:S1075"&Remove this hard-coded path-delimiter.(÷…Äóÿÿÿÿÿ8­þä‰—,
-Msquid:S1481",Remove this unused "comment" local variable.(âÀýàøÿÿÿÿ8­þä‰—,
-Dsquid:S1148"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ8­þä‰—,
-Msquid:S1481",Remove this unused "comment" local variable.(âÀýàøÿÿÿÿ8­þä‰—,
-"squid:ClassVariableVisibilityCheck"ZMake removedFolders a static final constant or non-public and provide accessors if needed.(¡ÕËú8í“¢‰—,
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(’©á½þÿÿÿÿ8­þä‰—,
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Éòø¾ýÿÿÿÿ8­þä‰—,
-‹"squid:ClassVariableVisibilityCheck"XMake removedFiles a static final constant or non-public and provide accessors if needed.(Ú«‚‹8­þä‰—,
-ssquid:S3776"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(ðáÍýÿÿÿÿ8­þä‰—,
-gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Æ·–8­þä‰—,
-gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ûúÑ÷8­þä‰—,
-Nsquid:S1135"2Complete the task associated to this TODO comment.(¾³ÉÈ8­þä‰—,
-\squid:S1854"@Remove this useless assignment to local variable "forceCheckin".(®ìË8í“¢‰—,
-Fsquid:S1181"%Catch Exception instead of Throwable.(‡˜ÚÚøÿÿÿÿ8­þä‰—,
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÚþŸËøÿÿÿÿ8­þä‰—,
-™squid:S1319"}The type of the "removedFoldersNameMap" object should be an interface such as "Map" rather than the implementation "HashMap".(â·Ï°8žß¡‰—,
-gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(à»ÍŽ8­þä‰—,
-Œ"squid:ClassVariableVisibilityCheck"TMake newFiles a static final constant or non-public and provide accessors if needed.( ¸ýÅýÿÿÿÿ8¹˜†—,
-Ksquid:S1066"/Merge this if statement with the enclosing one.(ÔªúŠ8­þä‰—,
-gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ïáœ€8­þä‰—,
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(øûÉ–üÿÿÿÿ8­þä‰—,
-\squid:S1854";Remove this useless assignment to local variable "comment".(âÀýàøÿÿÿÿ8­þä‰—,
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(•ñÂ’ûÿÿÿÿ8­þä‰—,
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ÒÌâ–øÿÿÿÿ8­þä‰—,
-Nsquid:S1135"2Complete the task associated to this TODO comment.(¹ïé¾8­þä‰—,
-lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(œú³Çýÿÿÿÿ8­þä‰—,
-Nsquid:S1135"2Complete the task associated to this TODO comment.(¾³ÉÈ8­þä‰—,
-Msquid:S1135"2Complete the task associated to this TODO comment.(”Ñý8­þä‰—,
-Psquid:S1066"/Merge this if statement with the enclosing one.(¶ÎÕËýÿÿÿÿ8­þä‰—,
-‘squid:S1319"pThe type of the "newFiles" object should be an interface such as "Set" rather than the implementation "HashSet".( ¸ýÅýÿÿÿÿ8¹˜†—,
-squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¡ÔÌÉ8­þä‰—,
-"squid:ClassVariableVisibilityCheck"WMake renamedDirs a static final constant or non-public and provide accessors if needed.(¾æ½ýÿÿÿÿ8¹˜†—,
-Fsquid:S1181"%Catch Exception instead of Throwable.(‡˜ÚÚøÿÿÿÿ8­þä‰—,
-"squid:ClassVariableVisibilityCheck"XMake renamedFiles a static final constant or non-public and provide accessors if needed.(¢Âå¾üÿÿÿÿ8¹˜†—,
-squid:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(€Í¯ª8­þä‰—,
-Msquid:S1481"1Remove this unused "forceCheckin" local variable.(®ìË8í“¢‰—,
-Vsquid:S1141"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8­þä‰—,
-Ksquid:S00108")Either remove or fill this block of code.(‡˜ÚÚøÿÿÿÿ8­þä‰—,
-”"squid:ClassVariableVisibilityCheck"aMake removedFoldersNameMap a static final constant or non-public and provide accessors if needed.(â·Ï°8žß¡‰—,
-l squid:LabelsShouldNotBeUsedCheck";Refactor the code to remove this label and the need for it.(³™Ö¦8­þä‰—,
-msquid:S1192"LDefine a constant instead of duplicating this literal "' newName='" 4 times.(À·ÇŒÿÿÿÿÿ8­þä‰—,
-”squid:S1319"sThe type of the "renamedDirs" object should be an interface such as "Map" rather than the implementation "HashMap".(¾æ½ýÿÿÿÿ8¹˜†—,
-’squid:S1319"vThe type of the "removedFolders" object should be an interface such as "Set" rather than the implementation "HashSet".(¡ÕËú8í“¢‰—,
-gsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(ðþí®8­þä‰—,
-\squid:S1854";Remove this useless assignment to local variable "comment".(âÀýàøÿÿÿÿ8­þä‰—,
-squid:S1319"tThe type of the "removedFiles" object should be an interface such as "Set" rather than the implementation "HashSet".(Ú«‚‹8­þä‰—,
-‡squid:S4144"fUpdate this method so that its implementation is not identical to "getCheckinEnvironment" on line 122.(‡™Åÿÿÿÿÿ8›¦…Š—,
