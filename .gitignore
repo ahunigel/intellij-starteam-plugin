@@ -1,2 +1,39 @@
+src/main/resources/plugins/*.jar
+out
+
+# ---- Sonar
+.sonar
+
+# ---- IntelliJ IDEA
+*.iws
+*.iml
+*.ipr
+.idea
+
+# ---- Eclipse
+.classpath
+.project
+.settings
+
+# ---- Maven
+target
+
+# ---- Mac OS X
 .DS_Store
-target/
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# ---- Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Gradle
+.gradle
+classes
+build

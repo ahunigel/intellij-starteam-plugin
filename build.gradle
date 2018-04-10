@@ -1,0 +1,153 @@
+#!groovy
+// The above triggers groovy syntax highlighting in vim
+
+plugins {
+  id "org.jetbrains.intellij" version "0.3.1"
+//  id "java"
+//  id "com.github.hierynomus.license" version "0.14.0"
+//  id "net.researchgate.release" version "2.6.0"
+//  id "com.jfrog.artifactory" version "4.5.4"
+//  id 'com.google.protobuf' version "0.8.3"
+}
+
+//apply plugin: 'org.jetbrains.intellij'
+//apply plugin: 'jacoco'
+//apply plugin: 'com.jfrog.artifactory'
+//apply plugin: 'maven'
+apply plugin: 'java'
+//apply plugin: 'com.google.protobuf'
+//apply plugin: 'idea'
+
+group = 'io.nigel.intellij'
+description = 'StarTeam for IntelliJ IDEA'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+intellij {
+  if (project.hasProperty("ijVersion")) {
+    version ijVersion
+  } else {
+    version '2016.3.2'
+  }
+  pluginName 'StarTeam'
+  updateSinceUntilBuild false
+  type 'IC'
+}
+
+//protobuf {
+//  // Configure the protoc executable
+//  protoc {
+//    // Download from repositories. Must be the same as the one used in sonarlint-core
+//    artifact = 'com.google.protobuf:protoc:3.1.0'
+//  }
+//}
+
+//idea {
+//  module {
+//    sourceDirs += file('build/generated/source/proto/main/java')
+//    generatedSourceDirs += file('build/generated/source/proto/main/java')
+//  }
+//}
+
+//runIde {
+//  systemProperty 'sonarlint.telemetry.disabled', 'true'
+//}
+
+repositories {
+  jcenter()
+  mavenLocal()
+  mavenCentral()
+  maven {
+    url "http://10.161.92.100:8081/nexus/content/groups/public"
+  }
+}
+
+//configurations {
+//  sqplugins { transitive = false }
+//}
+
+dependencies {
+//  compile "org.sonarsource.sonarlint.core:sonarlint-client-api:$sonarlintCoreVersion"
+//  compile "org.sonarsource.sonarlint.core:sonarlint-core:$sonarlintCoreVersion"
+  compile 'com.borland.starteam:starteam:16.0.47'
+//  compile 'commons-lang:commons-lang:2.6'
+//  compile 'com.google.code.findbugs:jsr305:2.0.2'
+  // provided by the core:
+  //compile 'com.google.protobuf:protobuf-java:3.1.0'
+  testCompile 'junit:junit:4.12'
+  testCompile 'org.assertj:assertj-core:3.6.2'
+  testCompile 'org.mockito:mockito-core:2.7.6'
+//  sqplugins (
+//    'org.sonarsource.java:sonar-java-plugin:5.1.1.13214',
+//    'org.sonarsource.javascript:sonar-javascript-plugin:4.1.0.6085',
+//    'org.sonarsource.php:sonar-php-plugin:2.12.0.2871',
+//    'org.sonarsource.python:sonar-python-plugin:1.8.0.1496'
+//  )
+}
+
+//task cleanSQPlugins(type: Delete) {
+//  delete fileTree('src/main/resources/plugins').include('**/*.jar')
+//}
+//
+//task downloadSQPlugins(type: Copy, dependsOn: cleanSQPlugins) {
+//  outputs.upToDateWhen { false }
+//  from configurations.sqplugins
+//  into 'src/main/resources/plugins'
+//}
+
+
+//classes.dependsOn downloadSQPlugins
+
+//release {
+//  failOnSnapshotDependencies = false
+//  failOnCommitNeeded = false
+//}
+
+//sonarqube {
+//  properties {
+//    property 'sonar.projectName', 'SonarLint for IntelliJ IDEA'
+//  }
+//}
+
+
+
+//license {
+//  mapping {
+//    java = 'SLASHSTAR_STYLE'
+//  }
+//  strictCheck true
+//}
+
+// Avoids IllegalStateException "Can't add different class with same name":
+//jacocoTestReport.doFirst {
+//  sourceDirectories = files('src/main/java')
+//  classDirectories = files('build/classes/main')
+//  additionalClassDirs = files()
+//  additionalSourceDirs = files()
+//}
+
+//artifactory {
+//  clientConfig.setIncludeEnvVars(true)
+//  clientConfig.setEnvVarsExcludePatterns('*password*,*PASSWORD*,*secret*,*MAVEN_CMD_LINE_ARGS*,sun.java.command,*token*,*TOKEN*,*LOGIN*,*login*')
+//  contextUrl = System.getenv('ARTIFACTORY_URL')
+//  publish {
+//    repository {
+//      repoKey = System.getenv('ARTIFACTORY_DEPLOY_REPO')
+//      username = System.getenv('ARTIFACTORY_DEPLOY_USERNAME')
+//      password = System.getenv('ARTIFACTORY_DEPLOY_PASSWORD')
+//    }
+//    defaults {
+//      properties = [
+//        'vcs.revision': (System.getenv('GIT_COMMIT') ?: System.getenv('TRAVIS_COMMIT')),
+//        'vcs.branch': (System.getenv('GIT_BRANCH') ?: System.getenv('TRAVIS_BRANCH')),
+//        'build.name': 'sonarlint-intellij',
+//        'build.number': (System.getenv('BUILD_ID') ?: System.getenv('TRAVIS_BUILD_NUMBER'))
+//      ]
+//      publishConfigs('archives')
+//      publishPom = true // Publish generated POM files to Artifactory (true by default)
+//      publishIvy = false // Publish generated Ivy descriptor files to Artifactory (true by default)
+//    }
+//  }
+//}
+
