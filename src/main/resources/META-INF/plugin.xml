@@ -1,7 +1,7 @@
 <idea-plugin url="https://github.com/ahunigel/intellij-starteam-plugin">
   <name>StarTeam Integration</name>
   <id>Starteam</id>
-  <version>1.2</version>
+  <version>${project.version}</version>
   <change-notes><![CDATA[
       <p>1.2:</p>
       <ul>
@@ -12,9 +12,8 @@
       <ul>
         <li>Upgrade StarTeam SDK to 14.0.76</li>
       </ul>
-      <p>See also the complete <a href="https://github.com/ahunigel/intellij-starteam-plugin/blob/master/CHANGES.md">changelog</a>.</p>
     ]]></change-notes>
-  <vendor>ahunigel</vendor>
+  <vendor email="zheng.nigel@gmail.com" url="https://github.com/ahunigel">ahunigel</vendor>
   <resource-bundle>StarteamBundle</resource-bundle>
   <category>VCS Integration</category>
   <depends>com.intellij.modules.vcs</depends>
