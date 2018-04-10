@@ -25,11 +25,9 @@ public class RefreshAction extends BasicAction {
   protected void perform(final Project project, StarteamVcs activeVcs, VirtualFile file) throws VcsException {
     try {
       activeVcs.refresh();
-      ApplicationManager.getApplication().runReadAction(new Runnable() {
-        public void run() {
-          VcsDirtyScopeManager.getInstance(project).markEverythingDirty();
-        }
-      });
+      ApplicationManager.getApplication().runReadAction(() ->
+          VcsDirtyScopeManager.getInstance(project).markEverythingDirty()
+      );
     } catch (VcsException ex) {
       Messages.showMessageDialog(project, ex.getMessage(), StarteamBundle.message("message.title.action.error"), Messages.getErrorIcon());
     }

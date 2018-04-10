@@ -33,24 +33,20 @@ import java.io.IOException;
  * Time: 4:06:50 PM
  * To change this template use File | Settings | File Templates.
  */
-public class UpdateStatusAction extends BasicAction
-{
-  protected String getActionName() {  return "UpdateStatus";  }
+public class UpdateStatusAction extends BasicAction {
+  protected String getActionName() {
+    return "UpdateStatus";
+  }
 
   protected boolean isEnabled(Project project, AbstractVcs vcs, VirtualFile file) {
     return true;
   }
 
-  protected void perform( final Project project, StarteamVcs activeVcs, VirtualFile file )
-  {
-    try{
+  protected void perform(final Project project, StarteamVcs activeVcs, VirtualFile file) {
+    try {
       activeVcs.refresh();
-      activeVcs.updateStatus( file );
-    }
-    catch(VcsException ex){
-      Messages.showMessageDialog(project, ex.getMessage(), StarteamBundle.message("message.title.action.error"), Messages.getErrorIcon());
-    }
-    catch(IOException ex){
+      activeVcs.updateStatus(file);
+    } catch (VcsException | IOException ex) {
       Messages.showMessageDialog(project, ex.getMessage(), StarteamBundle.message("message.title.action.error"), Messages.getErrorIcon());
     }
   }

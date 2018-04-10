@@ -29,9 +29,9 @@ public class StarteamChangeProvider implements ChangeProvider {
   private final StarteamVcs host;
   private boolean warnShown;
 
-  private final HashSet<String> filesNew = new HashSet<String>();
-  private final HashSet<String> filesChanged = new HashSet<String>();
-  private final HashSet<String> filesIgnored = new HashSet<String>();
+  private final HashSet<String> filesNew = new HashSet<>();
+  private final HashSet<String> filesChanged = new HashSet<>();
+  private final HashSet<String> filesIgnored = new HashSet<>();
 
   public StarteamChangeProvider(Project project, StarteamVcs host) {
     this.project = project;
@@ -39,13 +39,16 @@ public class StarteamChangeProvider implements ChangeProvider {
     warnShown = false;
   }
 
+  @Override
   public boolean isModifiedDocumentTrackingRequired() {
     return false;
   }
 
+  @Override
   public void doCleanup(final List<VirtualFile> files) {
   }
 
+  @Override
   public void getChanges(final VcsDirtyScope dirtyScope, final ChangelistBuilder builder, final ProgressIndicator progress,
                          final ChangeListManagerGate addGate) {
     initInternals();
@@ -74,21 +77,19 @@ public class StarteamChangeProvider implements ChangeProvider {
 
   private void processFailedConnection(final String msg) {
     if (!warnShown) {
-      Runnable action = new Runnable() {
-        public void run() {
-          String title = StarteamBundle.message("message.title.configuration.error");
-          String reconnectText = StarteamBundle.message("text.reconnect");
-          String cancelText = StarteamBundle.message("text.cancel");
-          int result = Messages.showChooseDialog(project, msg, title, Messages.getQuestionIcon(),
-              new String[]{reconnectText, cancelText}, reconnectText);
-          if (result == 0) {
-            try {
-              host.doShutdown();
-              host.doStart();
-              warnShown = false;
-            } catch (VcsException e) {
-              Messages.showErrorDialog(msg, StarteamBundle.message("message.title.configuration.error"));
-            }
+      Runnable action = () -> {
+        String title = StarteamBundle.message("message.title.configuration.error");
+        String reconnectText = StarteamBundle.message("text.reconnect");
+        String cancelText = StarteamBundle.message("text.cancel");
+        int result = Messages.showChooseDialog(project, msg, title, Messages.getQuestionIcon(),
+            new String[]{reconnectText, cancelText}, reconnectText);
+        if (result == 0) {
+          try {
+            host.doShutdown();
+            host.doStart();
+            warnShown = false;
+          } catch (VcsException e) {
+            Messages.showErrorDialog(msg, StarteamBundle.message("message.title.configuration.error"));
           }
         }
       };
@@ -270,7 +271,7 @@ public class StarteamChangeProvider implements ChangeProvider {
   }
 
   private void addRemovedFiles(final ChangelistBuilder builder) {
-    final HashSet<String> files = new HashSet<String>();
+    final HashSet<String> files = new HashSet<>();
     files.addAll(host.removedFolders);
     files.addAll(host.removedFiles);
 

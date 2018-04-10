@@ -5,13 +5,12 @@ import com.intellij.openapi.vcs.AbstractVcs;
 import com.intellij.openapi.vcs.actions.StandardVcsGroup;
 import com.intellij.vcs.starteam.StarteamVcsAdapter;
 
-public class StarteamGroup extends StandardVcsGroup
-{
-  public AbstractVcs getVcs(Project project)
-  {
+public class StarteamGroup extends StandardVcsGroup {
+  public AbstractVcs getVcs(Project project) {
     return StarteamVcsAdapter.getInstance(project);
   }
 
+  @Override
   public String getVcsName(final Project project) {
     return "StarTeam";
   }

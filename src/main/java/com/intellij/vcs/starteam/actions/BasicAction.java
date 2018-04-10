@@ -9,11 +9,13 @@ import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ContentIterator;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vcs.*;
+import com.intellij.openapi.vcs.AbstractVcs;
+import com.intellij.openapi.vcs.AbstractVcsHelper;
+import com.intellij.openapi.vcs.ProjectLevelVcsManager;
+import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vcs.changes.VcsDirtyScopeManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.vcs.starteam.StarteamBundle;
@@ -33,10 +35,9 @@ public abstract class BasicAction extends AnAction {
     AbstractVcs starteamVcs = null;
     try {
       starteamVcs = StarteamVcs.getInstance(project);
-    }
-    catch (NoClassDefFoundError exc) {
+    } catch (NoClassDefFoundError exc) {
       Messages.showErrorDialog(project, StarteamBundle.message("message.text.lost.connection"),
-                               StarteamBundle.message("message.title.operation.failed.error"));
+          StarteamBundle.message("message.title.operation.failed.error"));
     }
 
     //  Take into account (...==null) ANY problem with StarteamVCS state -
@@ -54,27 +55,24 @@ public abstract class BasicAction extends AnAction {
 
     try {
       final AbstractVcs host = starteamVcs;
-      List exceptions = helper.runTransactionRunnable(starteamVcs, new TransactionRunnable() {
-        public void run(List exceptions) {
-          for (VirtualFile file : files) {
-            try {
-              execute(project, host, file);
-            }
-            catch (VcsException ex) {
-              ex.setVirtualFile(file);
-              exceptions.add(ex);
-            }
+      List exceptions = helper.runTransactionRunnable(starteamVcs, exs -> {
+        for (VirtualFile file : files) {
+          try {
+            execute(project, host, file);
+          } catch (VcsException ex) {
+            ex.setVirtualFile(file);
+            exs.add(ex);
           }
         }
       }, null);
 
       helper.showErrors(exceptions, actionName != null ? actionName : starteamVcs.getDisplayName());
-    }
-    finally {
+    } finally {
       action.finish();
     }
   }
 
+  @Override
   public void update(AnActionEvent e) {
     super.update(e);
     updateStarteamAction(e, this);
@@ -105,11 +103,9 @@ public abstract class BasicAction extends AnAction {
         return;
       }
 
-      if (action != null) {
-        if (!action.isEnabled(project, activeVcs, file)) {
-          presentation.setEnabled(false);
-          return;
-        }
+      if (action != null && !action.isEnabled(project, activeVcs, file)) {
+        presentation.setEnabled(false);
+        return;
       }
     }
   }
@@ -120,8 +116,7 @@ public abstract class BasicAction extends AnAction {
 
     try {
       performOnItem(project, activeVcs, file);
-    }
-    catch (VcsException exc) {
+    } catch (VcsException exc) {
       e[0] = exc;
     }
 
@@ -132,22 +127,19 @@ public abstract class BasicAction extends AnAction {
       //  which should be skipped.
 
       final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-      fileIndex.iterateContentUnderDirectory(file, new ContentIterator() {
-        public boolean processFile(VirtualFile itFile) {
-          //  Perverse way to store the exception from the anonymous ContentIterator
-          //  implementor.
-          try {
-            performOnItem(project, activeVcs, file);
-          }
-          catch (VcsException exc) {
-            //  Store only the first exception to keep track the earliet problem.
-            //  But try to iterate over the whole subproject tree, e.g. to eliminate
-            //  possible single mistake.
-            if (e[0] == null) e[0] = exc;
-          }
-
-          return true;
+      fileIndex.iterateContentUnderDirectory(file, itFile -> {
+        //  Perverse way to store the exception from the anonymous ContentIterator
+        //  implementor.
+        try {
+          performOnItem(project, activeVcs, file);
+        } catch (VcsException exc) {
+          //  Store only the first exception to keep track the earliet problem.
+          //  But try to iterate over the whole subproject tree, e.g. to eliminate
+          //  possible single mistake.
+          if (e[0] == null) e[0] = exc;
         }
+
+        return true;
       });
     }
 
@@ -156,13 +148,9 @@ public abstract class BasicAction extends AnAction {
   }
 
   private void performOnItem(final Project project, final AbstractVcs activeVcs, final VirtualFile file) throws VcsException {
-    perform(project, (StarteamVcs)activeVcs, file);
+    perform(project, (StarteamVcs) activeVcs, file);
     VcsDirtyScopeManager.getInstance(project).fileDirty(file);
-    ApplicationManager.getApplication().runWriteAction(new Runnable() {
-      public void run() {
-        file.refresh(false, true);
-      }
-    });
+    ApplicationManager.getApplication().runWriteAction(() -> file.refresh(false, true));
   }
 
   protected abstract String getActionName();

@@ -16,6 +16,7 @@ import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizable;
+import com.intellij.openapi.util.RoamingTypeDisabled;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.vcs.AbstractVcs;
 import com.intellij.openapi.vcs.EditFileProvider;
@@ -39,7 +40,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent, JDOMExternalizable {
+public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent, JDOMExternalizable, RoamingTypeDisabled {
   @NonNls
   private static final String PERSISTENCY_REMOVED_TAG = "StarbasePersistencyRemovedFile";
   @NonNls
@@ -82,7 +83,7 @@ public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent,
   protected void start() throws VcsException {
     // no 'start' any more, but - init vcs
     try {
-      Class.forName("com.starbase.starteam.Project");
+      Class.forName("com.starteam.Project");
       myStarteamVcs = new StarteamVcs(myProject, config);
     } catch (Throwable e) {
       //  Nothing to do - if "starteam.Project" class has not been
@@ -92,21 +93,26 @@ public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent,
     }
   }
 
+  @Override
   public void activate() {
     if (getStarteamVcs() != null) getStarteamVcs().activate();
   }
 
+  @Override
   public void deactivate() {
     if (getStarteamVcs() != null) getStarteamVcs().deactivate();
   }
 
+  @Override
   public void disposeComponent() {
     if (getStarteamVcs() != null) getStarteamVcs().disposeComponent();
   }
 
+  @Override
   public void initComponent() {
   }
 
+  @Override
   public Configurable getConfigurable() {
     return (getStarteamVcs() != null) ? getStarteamVcs().getConfigurable() : new MyConfigurable();
   }
@@ -115,45 +121,54 @@ public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent,
     return project.getComponent(StarteamVcsAdapter.class);
   }
 
+  @Override
   public String getMenuItemText() {
     return StarteamBundle.message("starteam.menu.group.text");
   }
 
   @Nullable
+  @Override
   public CheckinEnvironment getCheckinEnvironment() {
     return (getStarteamVcs() != null) ? getStarteamVcs().getCheckinEnvironment() : null;
   }
 
   @Nullable
+  @Override
   public RollbackEnvironment getRollbackEnvironment() {
     return (getStarteamVcs() != null) ? getStarteamVcs().getRollbackEnvironment() : null;
   }
 
   @Nullable
+  @Override
   public EditFileProvider getEditFileProvider() {
     return (getStarteamVcs() != null) ? getStarteamVcs().getEditFileProvider() : null;
   }
 
   @Nullable
+  @Override
   public UpdateEnvironment getUpdateEnvironment() {
     return (getStarteamVcs() != null) ? getStarteamVcs().getUpdateEnvironment() : null;
   }
 
   @Nullable
+  @Override
   public UpdateEnvironment getStatusEnvironment() {
     return (getStarteamVcs() != null) ? getStarteamVcs().getStatusEnvironment() : null;
   }
 
   @Nullable
+  @Override
   public ChangeProvider getChangeProvider() {
     return (getStarteamVcs() != null) ? getStarteamVcs().getChangeProvider() : null;
   }
 
   @Nullable
+  @Override
   public VcsHistoryProvider getVcsHistoryProvider() {
     return (getStarteamVcs() != null) ? getStarteamVcs().getVcsHistoryProvider() : null;
   }
 
+  @Override
   public void loadSettings() {
     super.loadSettings();
     if (getStarteamVcs() != null) {
@@ -161,6 +176,7 @@ public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent,
     }
   }
 
+  @Override
   public boolean isVersionedDirectory(VirtualFile dir) {
     return (getStarteamVcs() != null) ? getStarteamVcs().isVersionedDirectory(dir) : false;
   }
@@ -245,6 +261,7 @@ public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent,
   }
 
   public static class MyConfigurable implements Configurable {
+    @Override
     public String getDisplayName() {
       return null;
     }
@@ -253,10 +270,12 @@ public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent,
       return null;
     }
 
+    @Override
     public String getHelpTopic() {
       return null;
     }
 
+    @Override
     public JComponent createComponent() {
       final JPanel result = new JPanel(new BorderLayout());
       result.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -266,16 +285,20 @@ public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent,
       return result;
     }
 
+    @Override
     public boolean isModified() {
       return false;
     }
 
+    @Override
     public void apply() throws ConfigurationException {
     }
 
+    @Override
     public void reset() {
     }
 
+    @Override
     public void disposeUIResources() {
     }
   }

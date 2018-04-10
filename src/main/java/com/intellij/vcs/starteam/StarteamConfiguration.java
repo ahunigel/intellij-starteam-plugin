@@ -6,7 +6,7 @@ import com.intellij.openapi.util.*;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 
-public class StarteamConfiguration extends AbstractProjectComponent implements JDOMExternalizable {
+public class StarteamConfiguration extends AbstractProjectComponent implements JDOMExternalizable, RoamingTypeDisabled {
   public String SERVER = "";
   public int PORT = 49201;
   public String USER = "";
@@ -35,6 +35,7 @@ public class StarteamConfiguration extends AbstractProjectComponent implements J
   }
 
   @NotNull
+  @Override
   public String getComponentName() {
     return "StarteamConfiguration";
   }

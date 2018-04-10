@@ -14,38 +14,34 @@ import java.io.IOException;
  * User: lloix
  * Date: Apr 3, 2007
  */
-public class StarteamEditFileProvider implements EditFileProvider
-{
+public class StarteamEditFileProvider implements EditFileProvider {
   private final StarteamVcs host;
 
-  public StarteamEditFileProvider( StarteamVcs host )
-  {
+  public StarteamEditFileProvider(StarteamVcs host) {
     this.host = host;
   }
 
-  public String getRequestText() {  return StarteamBundle.message("message.text.checkout.question");  }
+  public String getRequestText() {
+    return StarteamBundle.message("message.text.checkout.question");
+  }
 
-  public void editFiles( VirtualFile[] files )
-  {
-    for( final VirtualFile file : files )
-    {
-      try
-      {
-        host.checkoutFile( file.getPath(), false );
-      }
-      catch( VcsException e )
-      {
-        Messages.showErrorDialog( e.getLocalizedMessage(), StarteamBundle.message("message.title.operation.failed.error"));
+  public void editFiles(VirtualFile[] files) {
+    for (final VirtualFile file : files) {
+      try {
+        host.checkoutFile(file.getPath(), false);
+      } catch (VcsException e) {
+        Messages.showErrorDialog(e.getLocalizedMessage(), StarteamBundle.message("message.title.operation.failed.error"));
 
-        ApplicationManager.getApplication().runWriteAction( new Runnable() { public void run(){
-          try {   ReadOnlyAttributeUtil.setReadOnlyAttribute( file, false );  }
-          catch( IOException e ) {
-            Messages.showErrorDialog( StarteamBundle.message("message.text.ro.set.error", file.getPath()),
-                                      StarteamBundle.message("message.title.operation.failed.error"));
+        ApplicationManager.getApplication().runWriteAction(() -> {
+          try {
+            ReadOnlyAttributeUtil.setReadOnlyAttribute(file, false);
+          } catch (IOException ex) {
+            Messages.showErrorDialog(StarteamBundle.message("message.text.ro.set.error", file.getPath()),
+                StarteamBundle.message("message.title.operation.failed.error"));
           }
-        } });
+        });
       }
-      file.refresh( true, false );
+      file.refresh(true, false);
     }
   }
 }

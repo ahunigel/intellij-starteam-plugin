@@ -26,7 +26,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public class StarteamApplicationLevelHook implements ApplicationComponent {
-  @NonNls private static final String SBAS_FOLDER_SIG = ".sbas;.IJI.*;";
+  @NonNls
+  private static final String SBAS_FOLDER_SIG = ".sbas;.IJI.*;";
   private final FileTypeManager myFileTypeManager;
 
   public StarteamApplicationLevelHook(final FileTypeManager fileTypeManager) {
@@ -34,6 +35,7 @@ public class StarteamApplicationLevelHook implements ApplicationComponent {
     myFileTypeManager = fileTypeManager;
   }
 
+  @Override
   public void disposeComponent() {
   }
 
@@ -52,15 +54,11 @@ public class StarteamApplicationLevelHook implements ApplicationComponent {
    * they are not becoming the part of the project in the case when "Tools |
    * Personal Options | File | File Status Repository" is set to "Per Folder"
    */
-  private void addIgnoredFolders()
-  {
+  private void addIgnoredFolders() {
     String patterns = myFileTypeManager.getIgnoredFilesList();
-    if( patterns.indexOf( SBAS_FOLDER_SIG ) == -1 )
-    {
-      final String newPattern = patterns + ((patterns.charAt( patterns.length() - 1 ) == ';') ? "" : ";" ) + SBAS_FOLDER_SIG;
-      ApplicationManager.getApplication().runWriteAction( new Runnable()
-        { public void run() { myFileTypeManager.setIgnoredFilesList( newPattern ); } }
-      );
+    if (patterns.indexOf(SBAS_FOLDER_SIG) == -1) {
+      final String newPattern = patterns + ((patterns.charAt(patterns.length() - 1) == ';') ? "" : ";") + SBAS_FOLDER_SIG;
+      ApplicationManager.getApplication().runWriteAction(() -> myFileTypeManager.setIgnoredFilesList(newPattern));
     }
   }
 }

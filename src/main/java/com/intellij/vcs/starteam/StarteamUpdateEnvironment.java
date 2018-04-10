@@ -1,7 +1,6 @@
 package com.intellij.vcs.starteam;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.progress.ProcessCanceledException;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.vcs.FilePath;
@@ -46,8 +45,8 @@ public class StarteamUpdateEnvironment implements UpdateEnvironment {
 
   @NotNull
   @SuppressWarnings({"ThrowableInstanceNeverThrown"})
-  public UpdateSession updateDirectories(@NotNull FilePath[] roots, UpdatedFiles updatedFiles, ProgressIndicator progress, @NotNull final Ref<SequentialUpdatesContext> context) throws ProcessCanceledException {
-    final ArrayList<VcsException> errors = new ArrayList<VcsException>();
+  public UpdateSession updateDirectories(@NotNull FilePath[] roots, UpdatedFiles updatedFiles, ProgressIndicator progress, @NotNull final Ref<SequentialUpdatesContext> context) {
+    final ArrayList<VcsException> errors = new ArrayList<>();
 
     progressIndicator = progress;
     groups = updatedFiles;
@@ -62,9 +61,7 @@ public class StarteamUpdateEnvironment implements UpdateEnvironment {
           processStarteamFolder(folder, errors);
         }
       }
-    } catch (SocketException e) {
-      errors.add(new VcsException(e.getMessage()));
-    } catch (ServerException e) {
+    } catch (SocketException | ServerException e) {
       errors.add(new VcsException(e.getMessage()));
     } catch (TypeNotFoundException e) {
       errors.add(new VcsException(StarteamBundle.message("message.text.expired.license")));
@@ -127,9 +124,7 @@ public class StarteamUpdateEnvironment implements UpdateEnvironment {
       } else if (status == File.Status.MERGE) {
         groups.getGroupById(FileGroup.MERGED_WITH_CONFLICT_ID).add(file.getFullName(), vcsKey, null);
       }
-    } catch (IOException e) {
-      errors.add(new VcsException(e));
-    } catch (VcsException e) {
+    } catch (IOException | VcsException e) {
       errors.add(new VcsException(e));
     }
   }
