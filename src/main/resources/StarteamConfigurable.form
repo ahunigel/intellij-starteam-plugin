@@ -29,7 +29,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="com/intellij/vcs/starteam/StarteamBundle" key="label.configuration.user"/>
+                  <text resource-bundle="StarteamBundle" key="label.configuration.user"/>
                 </properties>
               </component>
               <component id="b8fb1" class="javax.swing.JLabel">
@@ -37,7 +37,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="com/intellij/vcs/starteam/StarteamBundle" key="label.configuration.password"/>
+                  <text resource-bundle="StarteamBundle" key="label.configuration.password"/>
                 </properties>
               </component>
               <component id="f88a5" class="javax.swing.JTextField" binding="myFldUser">
@@ -81,7 +81,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="com/intellij/vcs/starteam/StarteamBundle" key="label.configuration.port"/>
+                  <text resource-bundle="StarteamBundle" key="label.configuration.port"/>
                 </properties>
               </component>
               <component id="fd273" class="javax.swing.JTextField" binding="myFldServer">
@@ -99,7 +99,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="com/intellij/vcs/starteam/StarteamBundle" key="label.configuration.server"/>
+                  <text resource-bundle="StarteamBundle" key="label.configuration.server"/>
                 </properties>
               </component>
             </children>
@@ -141,7 +141,7 @@
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="com/intellij/vcs/starteam/StarteamBundle" key="label.configuration.view"/>
+                  <text resource-bundle="StarteamBundle" key="label.configuration.view"/>
                 </properties>
               </component>
               <component id="f7077" class="javax.swing.JLabel">
@@ -149,7 +149,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="com/intellij/vcs/starteam/StarteamBundle" key="label.configuration.project"/>
+                  <text resource-bundle="StarteamBundle" key="label.configuration.project"/>
                 </properties>
               </component>
               <component id="307dc" class="javax.swing.JLabel">
@@ -157,7 +157,7 @@
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text resource-bundle="com/intellij/vcs/starteam/StarteamBundle" key="label.configuration.working.path"/>
+                  <text resource-bundle="StarteamBundle" key="label.configuration.working.path"/>
                 </properties>
               </component>
             </children>
@@ -167,7 +167,7 @@
               <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text resource-bundle="com/intellij/vcs/starteam/StarteamBundle" key="text.test.connection"/>
+              <text resource-bundle="StarteamBundle" key="text.test.connection"/>
             </properties>
           </component>
         </children>
