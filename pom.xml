@@ -8,13 +8,21 @@
   <artifactId>starteam-plugin</artifactId>
   <version>1.0-SNAPSHOT</version>
   <properties>
+    <intellij.version>2016.3.2</intellij.version>
     <nexus.url>http://10.161.92.100:8081/nexus</nexus.url>
   </properties>
   <dependencies>
     <dependency>
+      <groupId>com.jetbrains</groupId>
+      <artifactId>ideaIC</artifactId>
+      <version>${intellij.version}</version>
+      <type>zip</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>com.borland.starteam</groupId>
       <artifactId>starteam</artifactId>
-      <version>14.0.76</version>
+      <version>16.0.47</version>
     </dependency>
   </dependencies>
 
