@@ -1,7 +1,19 @@
-<idea-plugin version="2">
+<idea-plugin>
   <name>StarTeam Integration</name>
   <id>Starteam</id>
-  <version>1.1</version>
+  <version>1.2</version>
+  <change-notes><![CDATA[
+      <p>1.2:</p>
+      <ul>
+        <li>Upgrade StarTeam SDK to 16.0.47</li>
+        <li>Fixed StarTeam configuration always loading issue</li>
+      </ul>
+      <p>1.1:</p>
+      <ul>
+        <li>Upgrade StarTeam SDK to 14.0.76</li>
+      </ul>
+      <p>See also the complete <a href="https://github.com/ahunigel/intellij-starteam-plugin/blob/master/CHANGES.md">changelog</a>.</p>
+    ]]></change-notes>
   <vendor>ahunigel</vendor>
   <resource-bundle>StarteamBundle</resource-bundle>
   <category>VCS Integration</category>
@@ -29,10 +41,10 @@
   </application-components>
 
   <actions>
-    <group id="StarteamGlobalGroup" class="com.intellij.vcs.starteam.actions.StarteamGroup" popup="true" >
+    <group id="StarteamGlobalGroup" class="com.intellij.vcs.starteam.actions.StarteamGroup" popup="true">
       <add-to-group group-id="VcsGroups" anchor="last"/>
     </group>
-    <group id="StarteamFilePopupGroup" class="com.intellij.vcs.starteam.actions.StarteamGroup" popup="true" >
+    <group id="StarteamFilePopupGroup" class="com.intellij.vcs.starteam.actions.StarteamGroup" popup="true">
       <add-to-group group-id="VcsGroup" anchor="last"/>
     </group>
 
