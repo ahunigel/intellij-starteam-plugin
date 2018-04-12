@@ -3,6 +3,12 @@
   <id>Starteam</id>
   <version>${project.version}</version>
   <change-notes><![CDATA[
+      <p>1.3:</p>
+      <ul>
+        <li>Fixed java.lang.ArrayStoreException</li>
+        <li>Fixed actions do not work due to null vcs</li>
+        <li>Fixed checkin and checkout with options</li>
+      </ul>
       <p>1.2:</p>
       <ul>
         <li>Upgrade StarTeam SDK to 16.0.47</li>
