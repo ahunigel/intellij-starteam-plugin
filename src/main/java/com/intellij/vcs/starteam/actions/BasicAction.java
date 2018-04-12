@@ -36,7 +36,7 @@ public abstract class BasicAction extends AnAction {
     try {
       starteamVcs = StarteamVcs.getInstance(project);
       if (starteamVcs == null) {
-        starteamVcs = StarteamVcsAdapter.getInstance(project);
+        starteamVcs = StarteamVcsAdapter.getInstance(project).getStarteamVcs();
       }
     } catch (NoClassDefFoundError exc) {
       Messages.showErrorDialog(project, StarteamBundle.message("message.text.lost.connection"),
