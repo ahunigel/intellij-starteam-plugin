@@ -88,7 +88,7 @@ public class StarteamUpdateEnvironment implements UpdateEnvironment {
       iteratedFodersCount++;
       if (iteratedFodersCount % 10 == 0 && progressIndicator != null) {
         progressIndicator.setText(StarteamBundle.message("update.progress.prefix") + " " +
-            iteratedFodersCount + StarteamBundle.message("update.progress.suffix"));
+            iteratedFodersCount + " " + StarteamBundle.message("update.progress.suffix"));
       }
 
       //  If the folder is new for local project - create it.
@@ -103,12 +103,14 @@ public class StarteamUpdateEnvironment implements UpdateEnvironment {
       host.refreshFolder(folder);
 
       File[] files = host.getFiles(folder);
-      for (File file : files)
+      for (File file : files) {
         processFile(file, errors);
+      }
 
       Folder[] subFolders = host.getSubFolders(folder);
-      for (Folder subFolder : subFolders)
+      for (Folder subFolder : subFolders) {
         processStarteamFolder(subFolder, errors);
+      }
     }
   }
 

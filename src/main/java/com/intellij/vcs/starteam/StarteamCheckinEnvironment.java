@@ -83,9 +83,9 @@ public class StarteamCheckinEnvironment implements CheckinEnvironment, RollbackE
   }
 
   public List<VcsException> commit(List<Change> changes, String preparedComment) {
-    HashSet<FilePath> processedFiles = new HashSet<FilePath>();
-    List<VcsException> errors = new ArrayList<VcsException>();
-    List<String> mergeFiles = new ArrayList<String>();
+    HashSet<FilePath> processedFiles = new HashSet<>();
+    List<VcsException> errors = new ArrayList<>();
+    List<String> mergeFiles = new ArrayList<>();
 
     commitNew(changes, preparedComment, processedFiles, errors);
     commitChanged(changes, preparedComment, processedFiles, errors, mergeFiles);
@@ -93,7 +93,7 @@ public class StarteamCheckinEnvironment implements CheckinEnvironment, RollbackE
 
     VcsUtil.refreshFiles(project, processedFiles);
 
-    if (mergeFiles.size() > 0) {
+    if (!mergeFiles.isEmpty()) {
       final UpdatedFiles updatedFiles = UpdatedFiles.create();
 
       final VcsKey vcsKey = StarteamVcs.getKey();
@@ -101,12 +101,10 @@ public class StarteamCheckinEnvironment implements CheckinEnvironment, RollbackE
         updatedFiles.getGroupById(FileGroup.MERGED_WITH_CONFLICT_ID).add(file, vcsKey, null);
       }
 
-      ApplicationManager.getApplication().invokeLater(new Runnable() {
-        public void run() {
-          if (project.isDisposed()) return;
-          ProjectLevelVcsManager.getInstance(project)
-              .showProjectOperationInfo(updatedFiles, StarteamBundle.message("local.vcs.action.name.checkin.files"));
-        }
+      ApplicationManager.getApplication().invokeLater(() -> {
+        if (project.isDisposed()) return;
+        ProjectLevelVcsManager.getInstance(project)
+            .showProjectOperationInfo(updatedFiles, StarteamBundle.message("local.vcs.action.name.checkin.files"));
       });
     }
     return errors;
@@ -118,8 +116,8 @@ public class StarteamCheckinEnvironment implements CheckinEnvironment, RollbackE
   }
 
   private void commitNew(List<Change> changes, String comment, HashSet<FilePath> processedFiles, List<VcsException> errors) {
-    HashSet<FilePath> folders = new HashSet<FilePath>();
-    HashSet<FilePath> files = new HashSet<FilePath>();
+    HashSet<FilePath> folders = new HashSet<>();
+    HashSet<FilePath> files = new HashSet<>();
 
     collectNewFilesAndFolders(changes, processedFiles, folders, files);
     commitFoldersAndFiles(folders, files, comment, errors);
@@ -249,7 +247,7 @@ public class StarteamCheckinEnvironment implements CheckinEnvironment, RollbackE
    * status.
    */
   public void rollbackChanges(List<Change> changes, final List<VcsException> errors, @NotNull final RollbackProgressListener listener) {
-    HashSet<FilePath> processedFiles = new HashSet<FilePath>();
+    HashSet<FilePath> processedFiles = new HashSet<>();
 
     listener.determinate();
     rollbackNew(changes, processedFiles, listener);
@@ -257,7 +255,7 @@ public class StarteamCheckinEnvironment implements CheckinEnvironment, RollbackE
   }
 
   private void rollbackNew(List<Change> changes, HashSet<FilePath> processedFiles, @NotNull final RollbackProgressListener listener) {
-    HashSet<FilePath> filesAndFolder = new HashSet<FilePath>();
+    HashSet<FilePath> filesAndFolder = new HashSet<>();
     collectNewChangesBack(changes, filesAndFolder, processedFiles);
 
     VcsDirtyScopeManager mgr = VcsDirtyScopeManager.getInstance(project);
@@ -274,7 +272,7 @@ public class StarteamCheckinEnvironment implements CheckinEnvironment, RollbackE
    * This ensures that no file will be left in any change list with status NEW.
    */
   private void collectNewChangesBack(List<Change> changes, HashSet<FilePath> newFilesAndfolders, HashSet<FilePath> processedFiles) {
-    HashSet<FilePath> foldersNew = new HashSet<FilePath>();
+    HashSet<FilePath> foldersNew = new HashSet<>();
     for (Change change : changes) {
       if (VcsUtil.isChangeForNew(change)) {
         FilePath filePath = change.getAfterRevision().getFile();
@@ -349,7 +347,7 @@ public class StarteamCheckinEnvironment implements CheckinEnvironment, RollbackE
     //  deal with mutual subordering.
     removeItems(ioFiles, false);
     removeItems(ioFiles, true);
-    return new ArrayList<VcsException>();
+    return new ArrayList<>();
   }
 
   private void removeItems(List<File> files, boolean isDir) {
@@ -422,7 +420,7 @@ public class StarteamCheckinEnvironment implements CheckinEnvironment, RollbackE
       extendStatus(file);
     }
     // Keep intentionally empty.
-    return new ArrayList<VcsException>();
+    return new ArrayList<>();
   }
 
   public boolean keepChangeListAfterCommit(ChangeList changeList) {
