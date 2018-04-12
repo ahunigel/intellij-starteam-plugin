@@ -238,7 +238,9 @@ public class StarteamVcs extends AbstractVcs {
       findView();
       if (myView != null && myConfiguration.ALTERNATIVE_WORKING_PATH.length() != 0) {
         myView.setAlternatePath(myConfiguration.ALTERNATIVE_WORKING_PATH);
-        myView.update();
+        if (myView.hasPermissions(new PermissionCollection(Permission.GENERIC_MODIFY_OBJECT))) {
+          myView.update();
+        }
 
         Folder root = myView.getRootFolder();
         root.setAlternatePathFragment(myConfiguration.ALTERNATIVE_WORKING_PATH);
@@ -349,11 +351,15 @@ public class StarteamVcs extends AbstractVcs {
   }
 
   public boolean checkinFile(String path, Object parameters, Map userData) throws VcsException {
-    if (LOG.isDebugEnabled()) LOG.debug("enter: checkinFile(file='" + path + "')");
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("enter: checkinFile(file='" + path + "')");
+    }
 
     refresh();
     File f = findFile(path);
-    if (f == null) error(FILE_NOT_FOUND_IN_STARTEAM, path);
+    if (f == null) {
+      error(FILE_NOT_FOUND_IN_STARTEAM, path);
+    }
 
     try {
 //      updateStatus( f );  !!! do not uncomment !!!
@@ -369,8 +375,9 @@ public class StarteamVcs extends AbstractVcs {
        */
       f.setContentModifiedTime(new DateTime(new Date()));
 
-      if (LOG.isDebugEnabled())
+      if (LOG.isDebugEnabled()) {
         LOG.debug("fileStatus:" + f.getStatus().getDisplayName());
+      }
 
       File.Status status = f.getStatus();
       if (status == File.Status.MERGE || status == File.Status.OUT_OF_DATE) {
@@ -407,8 +414,9 @@ public class StarteamVcs extends AbstractVcs {
       //  repository versions of the file - just return "false" in order to
       //  notify the user about checkin failure. Otherwise (smth serious like
       //  broken connection) - propagate the exception further.
-      if (e.getMessage().indexOf(REPOSITORY_FILE_NEWER) != -1)
+      if (e.getMessage().indexOf(REPOSITORY_FILE_NEWER) != -1) {
         return false;
+      }
 
       throw new VcsException(e);
     }
@@ -420,12 +428,15 @@ public class StarteamVcs extends AbstractVcs {
   }
 
   public boolean checkoutFile(String path, boolean verbose) throws VcsException {
-    if (LOG.isDebugEnabled())
+    if (LOG.isDebugEnabled()) {
       LOG.debug("enter: checkoutFile(file='" + path + "')");
+    }
 
     refresh();
     File f = findFile(path);
-    if (f == null) error(FILE_NOT_FOUND_IN_STARTEAM, path);
+    if (f == null) {
+      error(FILE_NOT_FOUND_IN_STARTEAM, path);
+    }
 
     return checkoutFile(f, verbose);
   }
@@ -440,8 +451,9 @@ public class StarteamVcs extends AbstractVcs {
       try {
         updateStatus(file);
       } catch (ServerException e) {
-        if (e.getErrorMessage().indexOf(message) == -1)
+        if (e.getErrorMessage().indexOf(message) == -1) {
           throw e;
+        }
       }
 
       final File.Status status = file.getStatus();
@@ -476,12 +488,14 @@ public class StarteamVcs extends AbstractVcs {
 
   public void checkoutFolder(Folder folder) throws VcsException {
     File[] files = getFiles(folder);
-    for (File file : files)
+    for (File file : files) {
       checkoutFile(file, false);
+    }
 
     Folder[] subfolders = getSubFolders(folder);
-    for (Folder sub : subfolders)
+    for (Folder sub : subfolders) {
       checkoutFolder(sub);
+    }
   }
 
   public byte[] getFileContent(String path) throws VcsException {
@@ -491,7 +505,9 @@ public class StarteamVcs extends AbstractVcs {
 
     refresh();
     File f = findFile(path);
-    if (f == null) error(FILE_NOT_FOUND_IN_STARTEAM, path);
+    if (f == null) {
+      error(FILE_NOT_FOUND_IN_STARTEAM, path);
+    }
 
     ByteArrayOutputStream inputStream = new ByteArrayOutputStream();
 
@@ -507,12 +523,15 @@ public class StarteamVcs extends AbstractVcs {
   }
 
   public void lockFile(String path) throws VcsException {
-    if (LOG.isDebugEnabled())
+    if (LOG.isDebugEnabled()) {
       LOG.debug("enter: lockFile(file='" + path + "')");
+    }
 
     refresh();
     File f = findFile(path);
-    if (f == null) error(FILE_NOT_FOUND_IN_STARTEAM, path);
+    if (f == null) {
+      error(FILE_NOT_FOUND_IN_STARTEAM, path);
+    }
 
     lockFile(f);
   }
@@ -527,12 +546,15 @@ public class StarteamVcs extends AbstractVcs {
   }
 
   public void unlockFile(String path) throws VcsException {
-    if (LOG.isDebugEnabled())
+    if (LOG.isDebugEnabled()) {
       LOG.debug("enter: unlockFile(file='" + path + "')");
+    }
 
     refresh();
     File f = findFile(path);
-    if (f == null) error(FILE_NOT_FOUND_IN_STARTEAM, path);
+    if (f == null) {
+      error(FILE_NOT_FOUND_IN_STARTEAM, path);
+    }
 
     unlockFile(f);
   }
@@ -677,7 +699,7 @@ public class StarteamVcs extends AbstractVcs {
 
   public void renameAndCheckInFile(String filePath, String newName, Object parameters) throws VcsException {
     if (LOG.isDebugEnabled()) {
-      LOG.debug("enter: renameFile(filePath='" + filePath + "' newName='" + newName + "')");
+      LOG.debug("enter: renameFile(filePath='{}' newName='{}')", filePath, newName);
     }
     String comment = (String) parameters;
 
@@ -711,7 +733,7 @@ public class StarteamVcs extends AbstractVcs {
 
   public void setWorkingFolderName(String path, String newName) throws VcsException {
     if (LOG.isDebugEnabled()) {
-      LOG.debug("enter: setWorkingFolderName(path='" + path + "' newName='" + newName + "')");
+      LOG.debug("enter: setWorkingFolderName(path='{}' newName='{}')", path, newName);
     }
 
     refresh();
@@ -1197,19 +1219,16 @@ public class StarteamVcs extends AbstractVcs {
       EnumeratedValue[] values = ((EnumeratedProperty) p).getAllValues();
       for (int i = 0; i < values.length; i++) {
         EnumeratedValue next = values[i];
-        if (next.isEnabled()) {
-          if (!next.equals(oldvalue)) {
-            item.setEnumeratedValues(p,
-                new EnumeratedValue[]{next});
-            break;
-          }
+        if (next.isEnabled() && !next.equals(oldvalue)) {
+          item.setEnumeratedValues(p, new EnumeratedValue[]{next});
+          break;
         }
       }
     }
   }
 
   public static Property[] initProperties(Item item, String name) {
-    Vector prprtys = new Vector();
+    List<Property> prprtys = new ArrayList();
     Property[] properties = (Property[]) item.getType().getProperties()
         .toArray(new Property[0]);
     for (int i = 0; i < properties.length; i++) {
@@ -1228,10 +1247,10 @@ public class StarteamVcs extends AbstractVcs {
         item.setDateTimeValue(p, com.starteam.util.DateTime.now());
       }
     }
-    return (Property[]) prprtys.toArray(new Property[prprtys.size()]);
+    return prprtys.toArray(new Property[prprtys.size()]);
   }
 
-  public File makeFile(Folder parent, String name) throws IOException {
+  public File makeFile(Folder parent, String name) {
     File.Type flTyp = myServer.getTypes().FILE;
     File file = (File) flTyp.createItem(parent);
     file.setName(name);
