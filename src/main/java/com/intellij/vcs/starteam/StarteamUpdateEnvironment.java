@@ -118,11 +118,18 @@ public class StarteamUpdateEnvironment implements UpdateEnvironment {
     final VcsKey vcsKey = StarteamVcs.getKey();
     try {
       File.Status status = file.getStatus();
-      if (status == File.Status.MISSING || status == File.Status.OUT_OF_DATE) {
+      if (status == File.Status.MISSING) {
+        host.checkoutFile(file, false);
+        groups.getGroupById(FileGroup.CREATED_ID).add(file.getFullName(), vcsKey, null);
+      } else if (status == File.Status.OUT_OF_DATE) {
         host.checkoutFile(file, false);
         groups.getGroupById(FileGroup.UPDATED_ID).add(file.getFullName(), vcsKey, null);
       } else if (status == File.Status.MODIFIED) {
+        groups.getGroupById(FileGroup.MODIFIED_ID).add(file.getFullName(), vcsKey, null);
+      } else if (status == File.Status.UNKNOWN) {
         groups.getGroupById(FileGroup.SKIPPED_ID).add(file.getFullName(), vcsKey, null);
+      } else if (status == File.Status.NEW) {
+        groups.getGroupById(FileGroup.LOCALLY_ADDED_ID).add(file.getFullName(), vcsKey, null);
       } else if (status == File.Status.MERGE) {
         groups.getGroupById(FileGroup.MERGED_WITH_CONFLICT_ID).add(file.getFullName(), vcsKey, null);
       }
