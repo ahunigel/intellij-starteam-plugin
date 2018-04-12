@@ -37,8 +37,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent, JDOMExternalizable, RoamingTypeDisabled {
   @NonNls
@@ -247,7 +247,7 @@ public class StarteamVcsAdapter extends AbstractVcs implements ProjectComponent,
     }
   }
 
-  private static void writeExternalElement(final Element element, HashSet<String> files, String tag) {
+  private static void writeExternalElement(final Element element, Set<String> files, String tag) {
     //  Sort elements of the list so that there is no perturbation in .ipr/.iml
     //  files in the case when no data has changed.
     String[] sorted = ArrayUtil.toStringArray(files);

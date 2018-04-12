@@ -99,7 +99,7 @@ public class VFSListener extends VirtualFileAdapter {
     return existsItem;
   }
 
-  private static void processRename(HashMap<String, String> renamedItems, String prevName, String currName, String newName) {
+  private static void processRename(Map<String, String> renamedItems, String prevName, String currName, String newName) {
     //  Newer name must refer to the oldest one in the chain of renamings
     if (prevName == null)
       prevName = currName;
