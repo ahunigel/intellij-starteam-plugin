@@ -32,6 +32,8 @@ public class StarteamEditFileProvider implements EditFileProvider {
       } catch (VcsException e) {
         Messages.showErrorDialog(e.getLocalizedMessage(), StarteamBundle.message("message.title.operation.failed.error"));
 
+      } finally {
+
         ApplicationManager.getApplication().runWriteAction(() -> {
           try {
             ReadOnlyAttributeUtil.setReadOnlyAttribute(file, false);
