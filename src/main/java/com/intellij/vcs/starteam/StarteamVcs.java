@@ -10,6 +10,7 @@ import com.intellij.openapi.vcs.changes.ChangeListManager;
 import com.intellij.openapi.vcs.changes.ChangeProvider;
 import com.intellij.openapi.vcs.checkin.CheckinEnvironment;
 import com.intellij.openapi.vcs.history.VcsHistoryProvider;
+import com.intellij.openapi.vcs.history.VcsRevisionNumber;
 import com.intellij.openapi.vcs.rollback.RollbackEnvironment;
 import com.intellij.openapi.vcs.update.UpdateEnvironment;
 import com.intellij.openapi.vfs.LocalFileOperationsHandler;
@@ -22,6 +23,7 @@ import com.starteam.*;
 import com.starteam.exceptions.ServerException;
 import com.starteam.util.DateTime;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
@@ -355,11 +357,7 @@ public class StarteamVcs extends AbstractVcs {
       LOG.debug("enter: checkinFile(file='" + path + "')");
     }
 
-    refresh();
-    File f = findFile(path);
-    if (f == null) {
-      error(FILE_NOT_FOUND_IN_STARTEAM, path);
-    }
+    File f = getFile(path);
 
     try {
 //      updateStatus( f );  !!! do not uncomment !!!
@@ -432,11 +430,7 @@ public class StarteamVcs extends AbstractVcs {
       LOG.debug("enter: checkoutFile(file='" + path + "')");
     }
 
-    refresh();
-    File f = findFile(path);
-    if (f == null) {
-      error(FILE_NOT_FOUND_IN_STARTEAM, path);
-    }
+    File f = getFile(path);
 
     return checkoutFile(f, verbose);
   }
@@ -498,17 +492,21 @@ public class StarteamVcs extends AbstractVcs {
     }
   }
 
+  public VcsRevisionNumber getFileRevision(File f) {
+    return new VcsRevisionNumber.Int(f.getContentVersion());
+  }
+
   public byte[] getFileContent(String path) throws VcsException {
     if (LOG.isDebugEnabled()) {
       LOG.debug("enter: getFileContent(file='" + path + "')");
     }
 
-    refresh();
-    File f = findFile(path);
-    if (f == null) {
-      error(FILE_NOT_FOUND_IN_STARTEAM, path);
-    }
+    File f = getFile(path);
 
+    return getFileContent(f);
+  }
+
+  public byte[] getFileContent(File f) throws VcsException {
     ByteArrayOutputStream inputStream = new ByteArrayOutputStream();
 
     try {
@@ -522,16 +520,22 @@ public class StarteamVcs extends AbstractVcs {
     return inputStream.toByteArray();
   }
 
-  public void lockFile(String path) throws VcsException {
-    if (LOG.isDebugEnabled()) {
-      LOG.debug("enter: lockFile(file='" + path + "')");
-    }
-
+  @NotNull
+  public File getFile(String path) throws VcsException {
     refresh();
     File f = findFile(path);
     if (f == null) {
       error(FILE_NOT_FOUND_IN_STARTEAM, path);
     }
+    return f;
+  }
+
+  public void lockFile(String path) throws VcsException {
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("enter: lockFile(file='" + path + "')");
+    }
+
+    File f = getFile(path);
 
     lockFile(f);
   }
@@ -550,11 +554,7 @@ public class StarteamVcs extends AbstractVcs {
       LOG.debug("enter: unlockFile(file='" + path + "')");
     }
 
-    refresh();
-    File f = findFile(path);
-    if (f == null) {
-      error(FILE_NOT_FOUND_IN_STARTEAM, path);
-    }
+    File f = getFile(path);
 
     unlockFile(f);
   }
@@ -703,9 +703,7 @@ public class StarteamVcs extends AbstractVcs {
     }
     String comment = (String) parameters;
 
-    refresh();
-    final File f = findFile(filePath);
-    if (f == null) error(FILE_NOT_FOUND_IN_STARTEAM, filePath);
+    final File f = getFile(filePath);
 
     try {
       final Folder folder = f.getParentFolder();
@@ -895,9 +893,7 @@ public class StarteamVcs extends AbstractVcs {
     }
 
     String comment = (String) parameters;
-    refresh();
-    final File f = findFile(filePath);
-    if (f == null) error(FILE_NOT_FOUND_IN_STARTEAM, filePath);
+    final File f = getFile(filePath);
 
     final Folder newFolder = findFolder(newParentPath);
     if (newFolder == null) error(FOLDER_NOT_FOUND_IN_STARTEAM, newParentPath);

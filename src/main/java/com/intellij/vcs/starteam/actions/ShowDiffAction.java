@@ -12,6 +12,7 @@ import com.intellij.openapi.vcs.AbstractVcs;
 import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vcs.FileStatusManager;
 import com.intellij.openapi.vcs.VcsException;
+import com.intellij.openapi.vcs.history.VcsRevisionNumber;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.vcs.starteam.StarteamBundle;
 import com.intellij.vcs.starteam.StarteamVcs;
@@ -36,7 +37,9 @@ public class ShowDiffAction extends BasicAction {
     try {
       byte[] localContent = getContentOf(file);
       String upToDateFilePath = file.getPresentableUrl();
-      final byte[] vcsContent = activeVcs.getFileContent(upToDateFilePath);
+      com.starteam.File vcsFile = activeVcs.getFile(upToDateFilePath);
+      final byte[] vcsContent = activeVcs.getFileContent(vcsFile);
+      final VcsRevisionNumber vcsRevisionNumber = activeVcs.getFileRevision(vcsFile);
       if (vcsContent == null) return;
 
       /*
@@ -50,9 +53,11 @@ public class ShowDiffAction extends BasicAction {
 
       if (fileType.isBinary()) {
         if (Arrays.equals(localContent, vcsContent)) {
-          Messages.showMessageDialog(StarteamBundle.message("message.text.diff.binary.contents.equal"), StarteamBundle.message("message.title.diff.contents.equal"), Messages.getInformationIcon());
+          Messages.showMessageDialog(StarteamBundle.message("message.text.diff.binary.contents.equal"),
+              StarteamBundle.message("message.title.diff.contents.equal"), Messages.getInformationIcon());
         } else {
-          Messages.showMessageDialog(StarteamBundle.message("message.text.diff.binary.contents.different"), StarteamBundle.message("message.title.contents.different"), Messages.getInformationIcon());
+          Messages.showMessageDialog(StarteamBundle.message("message.text.diff.binary.contents.different"),
+              StarteamBundle.message("message.title.contents.different"), Messages.getInformationIcon());
         }
         return;
       }
@@ -60,7 +65,9 @@ public class ShowDiffAction extends BasicAction {
       BinaryContent content = new BinaryContent(project, vcsContent, file.getCharset(), fileType, upToDateFilePath);
       SimpleDiffRequest diffRequest = new SimpleDiffRequest(project, StarteamBundle.message("diff.content.title.file.history",
           file.getPresentableUrl()));
-      diffRequest.setContentTitles(StarteamBundle.message("diff.content.title.repository.version", activeVcs.getDisplayName()), StarteamBundle.message("diff.content.title.local.version"));
+      diffRequest.setContentTitles(StarteamBundle.message("diff.content.title.repository.version",
+          activeVcs.getDisplayName(), vcsRevisionNumber.asString()),
+          StarteamBundle.message("diff.content.title.local.version"));
       diffRequest.setContents(content, new FileContent(project, file));
       diffRequest.addHint(modalHint);
       DiffTool diffTool = DiffManager.getInstance().getDiffTool();
