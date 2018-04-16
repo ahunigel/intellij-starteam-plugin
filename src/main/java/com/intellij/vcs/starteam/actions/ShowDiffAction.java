@@ -38,6 +38,7 @@ public class ShowDiffAction extends BasicAction {
       byte[] localContent = getContentOf(file);
       String upToDateFilePath = file.getPresentableUrl();
       com.starteam.File vcsFile = activeVcs.getFile(upToDateFilePath);
+      vcsFile.getCache().refresh();
       final byte[] vcsContent = activeVcs.getFileContent(vcsFile);
       final VcsRevisionNumber vcsRevisionNumber = activeVcs.getFileRevision(vcsFile);
       if (vcsContent == null) return;

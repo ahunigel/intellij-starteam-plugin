@@ -53,7 +53,7 @@ public class StarteamChangeProvider implements ChangeProvider {
                          final ChangeListManagerGate addGate) {
     initInternals();
     try {
-      iterateOverScope(dirtyScope, builder);
+//      iterateOverScope(dirtyScope, builder);
       iterateOverDirtyFiles(dirtyScope, builder);
 
       addNewAndRenamedFiles(builder);
@@ -99,8 +99,9 @@ public class StarteamChangeProvider implements ChangeProvider {
   }
 
   private void iterateOverScope(VcsDirtyScope scope, ChangelistBuilder builder) {
-    for (FilePath path : scope.getRecursivelyDirtyDirectories())
+    for (FilePath path : scope.getRecursivelyDirtyDirectories()) {
       iterateOverDirectories(path.getPath(), builder);
+    }
   }
 
   private void iterateOverDirectories(String path, final ChangelistBuilder builder) {
@@ -166,22 +167,23 @@ public class StarteamChangeProvider implements ChangeProvider {
         }
 
         com.starteam.File.Status status = file.getStatus();
-        if (status == com.starteam.File.Status.NEW)
+        if (status == com.starteam.File.Status.NEW) {
           filesNew.add(path);
-        else if (status == com.starteam.File.Status.MERGE)
+        } else if (status == com.starteam.File.Status.MERGE) {
           builder.processChange(new Change(new STContentRevision(host, filePath), new CurrentContentRevision(filePath), FileStatus.MERGE),
               StarteamVcs.getKey());
-        else if (status == com.starteam.File.Status.MODIFIED)
+        } else if (status == com.starteam.File.Status.MODIFIED) {
           filesChanged.add(path);
-        else if (status == com.starteam.File.Status.MISSING) {
+        } else if (status == com.starteam.File.Status.MISSING) {
           //  We have two source of information on locally deleted files:
           //  - one is stored in StarteamVcs host as a list controllable by VFS listener
           //  - here, on folder traverse.
           //  So do not duplicate files in the dirty lists.
 
           String normPath = filePath.getPath().replace(File.separatorChar, '/');
-          if (!host.removedFiles.contains(normPath))
+          if (!host.removedFiles.contains(normPath)) {
             builder.processLocallyDeletedFile(filePath);
+          }
         }
       }
     } catch (Exception e) {
@@ -275,13 +277,15 @@ public class StarteamChangeProvider implements ChangeProvider {
     files.addAll(host.removedFolders);
     files.addAll(host.removedFiles);
 
-    for (String path : files)
+    for (String path : files) {
       builder.processLocallyDeletedFile(VcsUtil.getFilePath(path));
+    }
   }
 
   private void addIgnoredFiles(final ChangelistBuilder builder) {
-    for (String path : filesIgnored)
+    for (String path : filesIgnored) {
       builder.processIgnoredFile(VcsUtil.getVirtualFile(path));
+    }
   }
 
   /**

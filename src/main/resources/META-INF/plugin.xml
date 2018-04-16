@@ -8,6 +8,8 @@
         <li>Fixed java.lang.ArrayStoreException</li>
         <li>Fixed actions do not work due to null vcs</li>
         <li>Fixed checkin and checkout with options</li>
+        <li>Add Update Status action</li>
+        <li>Do not iterate all project files for changes</li>
       </ul>
       <p>1.2:</p>
       <ul>
@@ -66,6 +68,7 @@
       <reference id="Starteam.ShowDiffAction"/>
       <separator/>
       <action id="Starteam.UpdateFolder" class="com.intellij.openapi.vcs.update.CommonUpdateFileOrDirectoryAction"/>
+      <action id="Starteam.UpdateStatus" class="com.intellij.vcs.starteam.actions.UpdateStatusAction"/>
       <action id="Starteam.Refresh" class="com.intellij.vcs.starteam.actions.RefreshAction"/>
       <!-- added by Duane -->
       <action id="Starteam.Reconnect" class="com.intellij.vcs.starteam.actions.ReconnectAction"/>

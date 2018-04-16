@@ -649,8 +649,9 @@ public class StarteamVcs extends AbstractVcs {
 
   public void updateStatus(VirtualFile file) throws IOException {
     File f = findFile(file.getPath().replace('/', java.io.File.separatorChar));
-    if (f != null)
+    if (f != null) {
       updateStatus(f);
+    }
   }
 
   private static void updateStatus(File f) throws IOException {
@@ -966,6 +967,7 @@ public class StarteamVcs extends AbstractVcs {
 
   public Folder[] getSubFolders(Folder folder) {
     final ViewMemberCollection items = folder.getItems(myServer.getTypes().FOLDER);
+    if (!items.getCache().isPopulated()) items.getCache().populate();
     Folder[] result = new Folder[items.size()];
     System.arraycopy(items.toArray(), 0, result, 0, items.size());
     return result;
@@ -973,6 +975,7 @@ public class StarteamVcs extends AbstractVcs {
 
   public File[] getFiles(Folder folder) {
     final ViewMemberCollection items = folder.getItems(myServer.getTypes().FILE);
+    if (!items.getCache().isPopulated()) items.getCache().populate();
     File[] result = new File[items.size()];
     System.arraycopy(items.toArray(), 0, result, 0, items.size());
     return result;
