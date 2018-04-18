@@ -10,6 +10,7 @@ import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ArrayUtil;
+import com.starteam.CacheAgent;
 import com.starteam.Project;
 import com.starteam.Server;
 import com.starteam.View;
@@ -42,6 +43,10 @@ public class StarteamConfigurable implements Configurable {
   private JPanel optionsPanel;
   private JCheckBox myCheckLockOnCheckout;
   private JCheckBox myCheckUnlockOnCheckin;
+  private JPanel cacheAgentSettings;
+  private JTextField cacheAgentPort;
+  private JTextField cacheAgentServer;
+  private JCheckBox myCheckEnableCacheAgent;
   private File myLastChosenDirectory;
 
   public StarteamConfigurable(com.intellij.openapi.project.Project project) {
@@ -220,6 +225,13 @@ public class StarteamConfigurable implements Configurable {
       Server server = new Server(myFldServer.getText(), Integer.parseInt(myFldPort.getText()));
 
       server.logOn(myFldUser.getText(), new String(myFldPassword.getPassword()));
+      if(server.isMPXAvailable()){
+        server.enableMPX();
+      }
+      if (myCheckEnableCacheAgent.isSelected()) {
+        CacheAgent agent = server.locateCacheAgent(cacheAgentServer.getText(), Integer.parseInt(cacheAgentPort.getText()));
+        server.getServerInfo().setEnableCacheAgentForFileContent(true);
+      }
       return server;
     } catch (NumberFormatException e) {
       Messages.showMessageDialog(myPanel, StarteamBundle.message("message.text.configuration.invalid.port"), StarteamBundle.message("message.title.configuration.error"), Messages.getErrorIcon());
@@ -247,6 +259,9 @@ public class StarteamConfigurable implements Configurable {
     myFldWorkingPath.setText(configuration.ALTERNATIVE_WORKING_PATH);
     myCheckLockOnCheckout.setSelected(configuration.LOCK_ON_CHECKOUT);
     myCheckUnlockOnCheckin.setSelected(configuration.UNLOCK_ON_CHECKIN);
+    myCheckEnableCacheAgent.setSelected(configuration.ENABLE_CACHE_AGENT);
+    cacheAgentServer.setText(configuration.CACHE_AGENT_SERVER);
+    cacheAgentPort.setText(String.valueOf(configuration.CACHE_AGENT_PORT));
   }
 
   public void apply() throws ConfigurationException {
@@ -262,6 +277,9 @@ public class StarteamConfigurable implements Configurable {
     configuration.ALTERNATIVE_WORKING_PATH = myFldWorkingPath.getText();
     configuration.LOCK_ON_CHECKOUT = myCheckLockOnCheckout.isSelected();
     configuration.UNLOCK_ON_CHECKIN = myCheckUnlockOnCheckin.isSelected();
+    configuration.ENABLE_CACHE_AGENT = myCheckEnableCacheAgent.isSelected();
+    configuration.CACHE_AGENT_SERVER = cacheAgentServer.getText();
+    configuration.CACHE_AGENT_PORT = Integer.parseInt(cacheAgentPort.getText());
 
     if (isChanged) {
       //  If parameters are configured inproperly we will catch an exception
@@ -297,7 +315,10 @@ public class StarteamConfigurable implements Configurable {
         configuration.VIEW.equals(myFldView.getText()) &&
         configuration.ALTERNATIVE_WORKING_PATH.equals(myFldWorkingPath.getText()) &&
         (configuration.LOCK_ON_CHECKOUT == myCheckLockOnCheckout.isSelected()) &&
-        (configuration.UNLOCK_ON_CHECKIN == myCheckUnlockOnCheckin.isSelected());
+        (configuration.UNLOCK_ON_CHECKIN == myCheckUnlockOnCheckin.isSelected()) &&
+        (configuration.ENABLE_CACHE_AGENT == myCheckEnableCacheAgent.isSelected()) &&
+        configuration.CACHE_AGENT_SERVER.equals(cacheAgentServer.getText()) &&
+        configuration.CACHE_AGENT_PORT == Integer.parseInt(cacheAgentPort.getText());
     return !equals;
   }
 }

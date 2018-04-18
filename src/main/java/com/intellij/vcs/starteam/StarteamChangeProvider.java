@@ -304,8 +304,9 @@ public class StarteamChangeProvider implements ChangeProvider {
 
   private boolean isFileUnderRenamedDir(String path) {
     for (String newPath : host.renamedDirs.keySet()) {
-      if (path.startsWith(newPath) && !path.equalsIgnoreCase(newPath))
+      if (path.startsWith(newPath) && !path.equalsIgnoreCase(newPath)) {
         return true;
+      }
     }
     return false;
   }

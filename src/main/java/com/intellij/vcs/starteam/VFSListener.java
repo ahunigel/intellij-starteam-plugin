@@ -18,7 +18,7 @@ import java.util.*;
  * User: lloix
  * Date: Jul 31, 2006
  */
-public class VFSListener extends VirtualFileAdapter {
+public class VFSListener implements VirtualFileListener {
   private final StarteamVcsAdapter adapter;
   private final StarteamVcs host;
   private final Project project;

@@ -295,6 +295,10 @@ public class StarteamVcs extends AbstractVcs {
       LOG.debug("logging in: " + myConfiguration.USER + "@" + "**********");
     }
     myServer.logOn(myConfiguration.USER, myConfiguration.getPassword());
+    if (myConfiguration.ENABLE_CACHE_AGENT) {
+      LOG.debug("locate cache agent instance: " + myConfiguration.CACHE_AGENT_SERVER + ":" + myConfiguration.CACHE_AGENT_PORT);
+      myServer.locateCacheAgent(myConfiguration.CACHE_AGENT_SERVER, myConfiguration.CACHE_AGENT_PORT);
+    }
   }
 
   private void disconnect() {
@@ -455,7 +459,11 @@ public class StarteamVcs extends AbstractVcs {
         int result = Messages.showYesNoDialog(StarteamBundle.message("confirmation.text.checkout.file.changed", file.getFullName()),
             StarteamBundle.message("confirmation.title"),
             Messages.getWarningIcon());
-        if (result != 0) return false;
+        if (result != 0) {
+          return false;
+        } else {
+          checkoutManager.getOptions().setForceCheckout(true);
+        }
       }
 
       if (!"".equals(myConfiguration.ALTERNATIVE_WORKING_PATH)) {
@@ -468,6 +476,7 @@ public class StarteamVcs extends AbstractVcs {
       }
 
       commitCheckout();
+      checkoutManager.getOptions().setForceCheckout(false);
 
       if (myConfiguration.LOCK_ON_CHECKOUT) {
         lockFile(file);
@@ -1259,7 +1268,6 @@ public class StarteamVcs extends AbstractVcs {
 
   private void commitCheckin() {
     if (checkinManager.canCommit()) {
-      LOG.debug("checkinManager can commit, do commit");
       checkinManager.commit();
     } else {
       LOG.debug("checkinManager cannot commit, force commit");
@@ -1269,7 +1277,6 @@ public class StarteamVcs extends AbstractVcs {
 
   private void commitCheckout() {
     if (checkoutManager.canCommit()) {
-      LOG.debug("checkoutManager can commit, do commit");
       checkoutManager.commit();
     } else {
       LOG.debug("checkoutManager cannot commit, force commit");
