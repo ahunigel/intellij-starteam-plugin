@@ -56,9 +56,16 @@ public class StarteamUpdateEnvironment implements UpdateEnvironment {
 
     try {
       for (FilePath path : roots) {
-        Folder folder = host.findFolder(path.getPath());
-        if (folder != null) {
-          processStarteamFolder(folder, errors);
+        if (path.isDirectory()) {
+          Folder folder = host.findFolder(path.getPath());
+          if (folder != null) {
+            processStarteamFolder(folder, errors);
+          }
+        } else {
+          File file = host.findFile(path.getPath());
+          if (file != null) {
+            processFile(file, errors);
+          }
         }
       }
     } catch (SocketException | ServerException e) {

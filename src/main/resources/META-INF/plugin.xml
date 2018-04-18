@@ -9,6 +9,7 @@
         <li>Fixed java.lang.ArrayStoreException</li>
         <li>Fixed actions do not work due to null vcs</li>
         <li>Fixed checkin and checkout with options</li>
+        <li>Fixed Update File action</li>
         <li>Add Update Status action</li>
         <li>Do not iterate all project files for changes</li>
       </ul>
