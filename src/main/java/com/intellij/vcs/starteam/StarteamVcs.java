@@ -666,11 +666,12 @@ public class StarteamVcs extends AbstractVcs {
     return path;
   }
 
-  public void updateStatus(VirtualFile file) throws IOException {
+  public File.Status updateStatus(VirtualFile file) throws IOException {
     File f = findFile(file.getPath().replace('/', java.io.File.separatorChar));
     if (f != null) {
       updateStatus(f);
     }
+    return f.getStatus();
   }
 
   private static void updateStatus(File f) throws IOException {

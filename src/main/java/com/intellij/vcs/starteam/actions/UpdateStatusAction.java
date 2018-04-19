@@ -16,6 +16,9 @@
 
 package com.intellij.vcs.starteam.actions;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vcs.AbstractVcs;
@@ -23,6 +26,7 @@ import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.vcs.starteam.StarteamBundle;
 import com.intellij.vcs.starteam.StarteamVcs;
+import com.starteam.File;
 
 import java.io.IOException;
 
@@ -45,7 +49,9 @@ public class UpdateStatusAction extends BasicAction {
   protected void perform(final Project project, StarteamVcs activeVcs, VirtualFile file) {
     try {
       activeVcs.refresh();
-      activeVcs.updateStatus(file);
+      File.Status status = activeVcs.updateStatus(file);
+      Notifications.Bus.notify(new Notification(activeVcs.getDisplayName(), "Update Status",
+          file.getName() + " status updated to: " + status.getDisplayName(), NotificationType.INFORMATION));
     } catch (VcsException | IOException ex) {
       Messages.showMessageDialog(project, ex.getMessage(), StarteamBundle.message("message.title.action.error"), Messages.getErrorIcon());
     }
