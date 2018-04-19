@@ -51,7 +51,7 @@ public class UpdateStatusAction extends BasicAction {
       activeVcs.refresh();
       File.Status status = activeVcs.updateStatus(file);
       Notifications.Bus.notify(new Notification(activeVcs.getDisplayName(), "Update Status",
-          file.getName() + " status updated to: " + status.getDisplayName(), NotificationType.INFORMATION));
+          file.getName() + " status is " + status.getDisplayName(), NotificationType.INFORMATION));
     } catch (VcsException | IOException ex) {
       Messages.showMessageDialog(project, ex.getMessage(), StarteamBundle.message("message.title.action.error"), Messages.getErrorIcon());
     }

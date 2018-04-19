@@ -17,24 +17,22 @@
 package com.intellij.vcs.starteam;
 
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.util.io.FileUtil;
-import com.intellij.openapi.vcs.DefaultRepositoryLocation;
 import com.intellij.openapi.vcs.FilePath;
-import com.intellij.openapi.vcs.RepositoryLocation;
 import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vcs.history.*;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.ui.ColumnInfo;
-import com.starteam.*;
+import com.intellij.vcsUtil.VcsUtil;
+import com.starteam.File;
+import com.starteam.ViewMember;
+import com.starteam.ViewMemberCollection;
 import com.starteam.exceptions.CommandException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -65,11 +63,12 @@ public class StarteamHistoryProvider implements VcsHistoryProvider {
   }
 
   public boolean canShowHistoryFor(@NotNull VirtualFile virtualFile) {
-    return false;
+    StarteamVcsAdapter baseHost = StarteamVcsAdapter.getInstance(host.getProject());
+    return VcsUtil.isFileForVcs(virtualFile, host.getProject(), baseHost);
   }
 
   public VcsDependentHistoryComponents getUICustomization(final VcsHistorySession session, JComponent forShortcutRegistration) {
-    return VcsDependentHistoryComponents.createOnlyColumns(new ColumnInfo[0]);
+    return VcsDependentHistoryComponents.createOnlyColumns(ColumnInfo.EMPTY_ARRAY);
   }
 
   public AnAction[] getAdditionalActions(final Runnable refresher) {
@@ -89,12 +88,12 @@ public class StarteamHistoryProvider implements VcsHistoryProvider {
     }
 
     if (file != null) {
-      ViewMemberCollection items = file.getHistory();
-      ArrayList<VcsFileRevision> revisions = new ArrayList<VcsFileRevision>();
+      ViewMemberCollection viewMemberCollection = file.getHistory();
+      ArrayList<VcsFileRevision> revisions = new ArrayList<>();
 
-      for (int i = 0; i < items.size(); i++) {
-        ViewMember item = items.getViewMember(i);
-        VcsFileRevision rev = new StarteamFileRevision((Item) item);
+      for (int i = 0; i < viewMemberCollection.size(); i++) {
+        ViewMember viewMember = viewMemberCollection.getAt(i);
+        VcsFileRevision rev = new StarteamFileRevision((File) viewMember);
         revisions.add(rev);
       }
       return new StarteamHistorySession(revisions, file);
@@ -109,24 +108,24 @@ public class StarteamHistoryProvider implements VcsHistoryProvider {
   }
 
   private static VcsRevisionNumber getCurrentRevisionNum(File file) {
-    VcsRevisionNumber revNum = VcsRevisionNumber.NULL;
     try {
       ViewMemberCollection items = file.getHistory();
-      if (items.isEmpty())
-        revNum = new VcsRevisionNumber.Int(items.getAt(items.size() - 1).getRevisionNumber() + 1);
+      if (!items.isEmpty()) {
+        ViewMember viewMember = items.getAt(items.size() - 1);
+        return new VcsRevisionNumber.Int(file.getContentVersion());
+      }
     } catch (Exception e) {
       //  We can catch e.g. com.starbase.starteam.ItemNotFoundException if we
       //  try to show history records for the deleted file.
-      revNum = VcsRevisionNumber.NULL;
     }
-    return revNum;
+    return VcsRevisionNumber.NULL;
   }
 
   private static class StarteamHistorySession extends VcsAbstractHistorySession {
     private final File file;
 
     public StarteamHistorySession(List<VcsFileRevision> revisions, File file) {
-      super(revisions);
+      super(revisions, new VcsRevisionNumber.Int(file.getContentVersion()));
       this.file = file;
     }
 
@@ -145,73 +144,5 @@ public class StarteamHistoryProvider implements VcsHistoryProvider {
     }
   }
 
-  private class StarteamFileRevision implements VcsFileRevision {
-    private final Item item;
-    private byte[] contents = null;
-
-    public StarteamFileRevision(Item item) {
-      this.item = item;
-    }
-
-    public VcsRevisionNumber getRevisionNumber() {
-      return new VcsRevisionNumber.Int(item.getRevisionNumber() + 1);
-    }
-
-    @Nullable
-    public String getBranchName() {
-      return item.getView().getName();
-    }
-
-    @Nullable
-    public RepositoryLocation getChangedRepositoryPath() {
-      return new DefaultRepositoryLocation(item.getServer().getApplication().toStarTeamURL(item));
-    }
-
-    public Date getRevisionDate() {
-      return item.getModifiedTime().toJavaDate();
-    }
-
-    public String getCommitMessage() {
-      return item.getComment();
-    }
-
-    public String getAuthor() {
-      String userName = StarteamBundle.message("unknown.author.name");
-      try {
-        User user = item.getModifiedBy();
-        userName = user.getName();
-      } catch (Exception e) {
-        //  Nothing to do - try/catch here is to overcome internal Starteam SDK
-        //  problem - it throws NPE inside <server.getUser(int)>.
-      }
-      return userName;
-    }
-
-    public byte[] loadContent() throws VcsException {
-      if (item instanceof File && contents == null) {
-        try {
-          File stFile = (File) item;
-          CheckoutManager mgr = stFile.getView().createCheckoutManager();
-          java.io.File file = new java.io.File(
-              FileUtil.getTempDirectory() + java.io.File.separator + Long.toString(System.currentTimeMillis()) + stFile.getName());
-//          stFile.checkoutTo(file, Item.LockType.UNCHANGED, true, true, false);
-          mgr.checkoutTo(stFile, file);
-          contents = FileUtil.loadFileBytes(file);
-          return contents;
-        } catch (IOException e) {
-          throw new VcsException(e);
-        }
-      }
-      return new byte[0];
-    }
-
-    public byte[] getContent() {
-      return contents;
-    }
-
-    public int compareTo(Object revision) {
-      return getRevisionDate().compareTo(((VcsFileRevision) revision).getRevisionDate());
-    }
-  }
 }
 

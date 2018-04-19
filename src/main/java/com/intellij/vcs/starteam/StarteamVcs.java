@@ -303,8 +303,8 @@ public class StarteamVcs extends AbstractVcs {
       myServer.locateCacheAgent(myConfiguration.CACHE_AGENT_SERVER, myConfiguration.CACHE_AGENT_PORT);
     }
 
-    Notifications.Bus.notify(new Notification("StarTeam", "StarTeam",
-        "Successfully connected to server: " + myConfiguration.SERVER + ":" + myConfiguration.PORT,
+    Notifications.Bus.notify(new Notification("StarTeam", "StarTeam connected",
+        myConfiguration.SERVER + ":" + myConfiguration.PORT,
         NotificationType.INFORMATION));
   }
 
@@ -317,7 +317,7 @@ public class StarteamVcs extends AbstractVcs {
     }
     myServer = null;
 
-    Notifications.Bus.notify(new Notification("StarTeam", "StarTeam",
+    Notifications.Bus.notify(new Notification("StarTeam", "StarTeam disconnected",
         "Successfully disconnected to server", NotificationType.INFORMATION));
   }
 

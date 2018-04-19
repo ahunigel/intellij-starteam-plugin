@@ -28,8 +28,9 @@ public class ShowDiffAction extends BasicAction {
 
   private static byte[] getContentOf(VirtualFile file) throws IOException {
     Document document = FileDocumentManager.getInstance().getCachedDocument(file);
-    if (document == null)
+    if (document == null) {
       return file.contentsToByteArray();
+    }
     return document.getText().getBytes(file.getCharset().name());
   }
 
@@ -72,7 +73,9 @@ public class ShowDiffAction extends BasicAction {
       diffRequest.setContents(content, new FileContent(project, file));
       diffRequest.addHint(modalHint);
       DiffTool diffTool = DiffManager.getInstance().getDiffTool();
-      if (diffTool.canShow(diffRequest)) diffTool.show(diffRequest);
+      if (diffTool.canShow(diffRequest)) {
+        diffTool.show(diffRequest);
+      }
 
     } catch (IOException e) {
       LOG.error(e);

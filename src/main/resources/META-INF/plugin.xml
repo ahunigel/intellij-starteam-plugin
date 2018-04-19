@@ -6,6 +6,7 @@
       <p>1.3:</p>
       <ul>
         <li>Add Cache Agent support</li>
+        <li>Add Show File History support</li>
         <li>Fixed java.lang.ArrayStoreException</li>
         <li>Fixed actions do not work due to null vcs</li>
         <li>Fixed checkin and checkout with options</li>
@@ -60,7 +61,7 @@
     <action id="Starteam.ShowDiffAction" class="com.intellij.vcs.starteam.actions.ShowDiffAction"/>
 
     <group id="Starteam.Popup">
-      <action id="Starteam.Add" class="com.intellij.vcs.starteam.actions.AddAction"/>
+      <action id="Starteam.Add" class="com.intellij.vcs.starteam.actions.AddAction" icon="AllIcons.General.Add"/>
       <reference id="CheckinFiles"/>
       <action id="Starteam.Checkout" class="com.intellij.vcs.starteam.actions.CheckoutAction"/>
       <action id="Starteam.UpdateFolder" class="com.intellij.openapi.vcs.update.CommonUpdateFileOrDirectoryAction"/>
