@@ -51,12 +51,12 @@ public class UnlockAction extends BasicAction {
         throw errors[0];
       } else {
         Notifications.Bus.notify(new Notification(activeVcs.getDisplayName(), "Unlocked",
-            "1 Project folder (" + file.getName() + ") unlocked", NotificationType.INFORMATION));
+            file.getPath(), NotificationType.INFORMATION));
       }
     } else {
       activeVcs.unlockFile(file.getPresentableUrl());
       Notifications.Bus.notify(new Notification(activeVcs.getDisplayName(), "Unlocked",
-          "1 Project file (" + file.getName() + ") unlocked", NotificationType.INFORMATION));
+          file.getName(), NotificationType.INFORMATION));
     }
   }
 }

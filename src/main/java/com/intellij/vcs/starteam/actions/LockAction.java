@@ -52,12 +52,12 @@ public class LockAction extends BasicAction {
         throw errors[0];
       } else {
         Notifications.Bus.notify(new Notification(activeVcs.getDisplayName(), "Locked",
-            "1 Project folder (" + file.getName() + ") locked", NotificationType.INFORMATION));
+            file.getPath(), NotificationType.INFORMATION));
       }
     } else {
       activeVcs.lockFile(file.getPresentableUrl());
       Notifications.Bus.notify(new Notification(activeVcs.getDisplayName(), "Locked",
-          "1 Project file (" + file.getName() + ") locked", NotificationType.INFORMATION));
+          file.getName(), NotificationType.INFORMATION));
     }
   }
 }

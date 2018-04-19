@@ -34,7 +34,7 @@ public class CheckoutAction extends BasicAction {
       }
     }
     Notifications.Bus.notify(new Notification(activeVcs.getDisplayName(), "Checkout",
-        file.getName() + " checked out", NotificationType.INFORMATION));
+        file.getName(), NotificationType.INFORMATION));
   }
 
 
