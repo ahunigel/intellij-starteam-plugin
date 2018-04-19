@@ -61,16 +61,17 @@
 
     <group id="Starteam.Popup">
       <action id="Starteam.Add" class="com.intellij.vcs.starteam.actions.AddAction"/>
-      <action id="Starteam.Checkout" class="com.intellij.vcs.starteam.actions.CheckoutAction"/>
-      <action id="Starteam.Lock" class="com.intellij.vcs.starteam.actions.LockAction"/>
-      <action id="Starteam.Unlock" class="com.intellij.vcs.starteam.actions.UnlockAction"/>
       <reference id="CheckinFiles"/>
-      <separator/>
-      <reference id="Vcs.ShowTabbedFileHistory"/>
-      <reference id="Starteam.ShowDiffAction"/>
-      <separator/>
+      <action id="Starteam.Checkout" class="com.intellij.vcs.starteam.actions.CheckoutAction"/>
       <action id="Starteam.UpdateFolder" class="com.intellij.openapi.vcs.update.CommonUpdateFileOrDirectoryAction"/>
       <action id="Starteam.UpdateStatus" class="com.intellij.vcs.starteam.actions.UpdateStatusAction"/>
+      <separator/>
+      <action id="Starteam.Lock" class="com.intellij.vcs.starteam.actions.LockAction"/>
+      <action id="Starteam.Unlock" class="com.intellij.vcs.starteam.actions.UnlockAction"/>
+      <separator/>
+      <reference id="Starteam.ShowDiffAction"/>
+      <reference id="Vcs.ShowTabbedFileHistory"/>
+      <separator/>
       <action id="Starteam.Refresh" class="com.intellij.vcs.starteam.actions.RefreshAction"/>
       <!-- added by Duane -->
       <action id="Starteam.Reconnect" class="com.intellij.vcs.starteam.actions.ReconnectAction"/>
