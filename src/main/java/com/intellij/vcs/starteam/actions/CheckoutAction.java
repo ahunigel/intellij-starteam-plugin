@@ -1,5 +1,8 @@
 package com.intellij.vcs.starteam.actions;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vcs.AbstractVcs;
 import com.intellij.openapi.vcs.FileStatus;
@@ -30,6 +33,8 @@ public class CheckoutAction extends BasicAction {
         activeVcs.checkoutFile(vFile.getPresentableUrl());
       }
     }
+    Notifications.Bus.notify(new Notification(activeVcs.getDisplayName(), "Checkout",
+        file.getName() + " checked out", NotificationType.INFORMATION));
   }
 
 

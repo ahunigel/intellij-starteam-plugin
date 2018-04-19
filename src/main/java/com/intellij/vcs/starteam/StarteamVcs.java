@@ -1,5 +1,8 @@
 package com.intellij.vcs.starteam;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.ui.Messages;
@@ -299,6 +302,10 @@ public class StarteamVcs extends AbstractVcs {
       LOG.debug("locate cache agent instance: " + myConfiguration.CACHE_AGENT_SERVER + ":" + myConfiguration.CACHE_AGENT_PORT);
       myServer.locateCacheAgent(myConfiguration.CACHE_AGENT_SERVER, myConfiguration.CACHE_AGENT_PORT);
     }
+
+    Notifications.Bus.notify(new Notification("StarTeam", "StarTeam",
+        "Successfully connected to server: " + myConfiguration.SERVER + ":" + myConfiguration.PORT,
+        NotificationType.INFORMATION));
   }
 
   private void disconnect() {
@@ -309,6 +316,9 @@ public class StarteamVcs extends AbstractVcs {
       myServer.disconnect();
     }
     myServer = null;
+
+    Notifications.Bus.notify(new Notification("StarTeam", "StarTeam",
+        "Successfully disconnected to server", NotificationType.INFORMATION));
   }
 
   private void findView() throws VcsException {
