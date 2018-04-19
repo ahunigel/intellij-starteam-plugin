@@ -29,6 +29,7 @@ public class VFSListener implements VirtualFileListener {
     adapter = StarteamVcsAdapter.getInstance(project);
   }
 
+  @Override
   public void propertyChanged(VirtualFilePropertyEvent event) {
     //  Trace renamed files only if we really working with Starteam.
     if (event.getPropertyName().equals(VirtualFile.PROP_NAME)) {
@@ -42,6 +43,7 @@ public class VFSListener implements VirtualFileListener {
     }
   }
 
+  @Override
   public void beforeFileMovement(VirtualFileMoveEvent event) {
     if (!event.getFile().isDirectory()) {
       String oldName = event.getFile().getPath();
@@ -63,6 +65,7 @@ public class VFSListener implements VirtualFileListener {
     }
   }
 
+  @Override
   public void beforePropertyChange(VirtualFilePropertyEvent event) {
     VirtualFile file = event.getFile();
 
@@ -76,10 +79,11 @@ public class VFSListener implements VirtualFileListener {
           host.renamedFiles.get(currentName);
       boolean existsItem = existsItem(file.isDirectory(), currentName);
       if (existsItem || prevName != null) {
-        if (file.isDirectory())
+        if (file.isDirectory()) {
           processRename(host.renamedDirs, prevName, currentName, newName);
-        else
+        } else {
           processRename(host.renamedFiles, prevName, currentName, newName);
+        }
       }
     }
   }
@@ -101,17 +105,20 @@ public class VFSListener implements VirtualFileListener {
 
   private static void processRename(Map<String, String> renamedItems, String prevName, String currName, String newName) {
     //  Newer name must refer to the oldest one in the chain of renamings
-    if (prevName == null)
+    if (prevName == null) {
       prevName = currName;
+    }
 
     //  Check whether we are trying to rename the file back -
     //  if so, just delete the old key-value pair
-    if (!prevName.equals(newName))
+    if (!prevName.equals(newName)) {
       renamedItems.put(newName, prevName);
+    }
 
     renamedItems.remove(currName);
   }
 
+  @Override
   public void fileCreated(VirtualFileEvent event) {
     @NonNls final String TITLE = "Add file(s)";
     @NonNls final String MESSAGE = "Do you want to schedule the following file for addition to Starteam?\n{0}";
@@ -121,8 +128,9 @@ public class VFSListener implements VirtualFileListener {
 
     //  In the case of multi-vcs project configurations, we need to skip all
     //  notifications on non-owned files
-    if (!VcsUtil.isFileForVcs(file, project, adapter))
+    if (!VcsUtil.isFileForVcs(file, project, adapter)) {
       return;
+    }
 
     //  In the case when the project content is synchronized over the
     //  occasionally removed files.
@@ -131,8 +139,9 @@ public class VFSListener implements VirtualFileListener {
 
     //  Do not ask user if the files created came from the vcs per se
     //  (obviously they are not new).
-    if (event.isFromRefresh())
+    if (event.isFromRefresh()) {
       return;
+    }
 
     //  Take into account only processable files.
 
@@ -149,24 +158,26 @@ public class VFSListener implements VirtualFileListener {
           //  In the case when we need to perform "Add" vcs action right upon
           //  the file's creation, put the file into the host's cache until it
           //  will be analyzed by the ChangeProvider.
-          if (option.getValue() == VcsShowConfirmationOption.Value.DO_ACTION_SILENTLY)
+          if (option.getValue() == VcsShowConfirmationOption.Value.DO_ACTION_SILENTLY) {
             host.add2NewFile(path);
-          else if (option.getValue() == VcsShowConfirmationOption.Value.SHOW_CONFIRMATION) {
-            List<VirtualFile> files = new ArrayList<VirtualFile>();
+          } else if (option.getValue() == VcsShowConfirmationOption.Value.SHOW_CONFIRMATION) {
+            List<VirtualFile> files = new ArrayList<>();
             files.add(file);
 
             AbstractVcsHelper helper = AbstractVcsHelper.getInstance(project);
             Collection<VirtualFile> filesToAdd =
                 helper.selectFilesToProcess(files, TITLE, null, TITLE, MESSAGE, option);
 
-            if (filesToAdd != null)
+            if (filesToAdd != null) {
               host.add2NewFile(path);
+            }
           }
         }
       }
     }
   }
 
+  @Override
   public void beforeFileDeletion(VirtualFileEvent event) {
     @NonNls final String TITLE = "Delete file(s)";
     @NonNls final String MESSAGE = "Do you want to schedule the following file for deletion from Starteam?\n{0}";
@@ -175,18 +186,21 @@ public class VFSListener implements VirtualFileListener {
 
     //  In the case of multi-vcs project configurations, we need to skip all
     //  notifications on non-owned files
-    if (!VcsUtil.isFileForVcs(file, project, adapter))
+    if (!VcsUtil.isFileForVcs(file, project, adapter)) {
       return;
+    }
 
     //  Do not ask user if the files created came from the vcs per se
     //  (obviously they are not new).
-    if (event.isFromRefresh())
+    if (event.isFromRefresh()) {
       return;
+    }
 
     //  Do not ask anything if file is not versioned yet
     FileStatus status = FileStatusManager.getInstance(project).getStatus(file);
-    if (status == FileStatus.UNKNOWN || status == FileStatus.IGNORED)
+    if (status == FileStatus.UNKNOWN || status == FileStatus.IGNORED) {
       return;
+    }
 
     //  Take into account only processable files.
     if (isFileProcessable(file) && VcsUtil.isFileForVcs(file, project, StarteamVcsAdapter.getInstance(project))) {
@@ -201,7 +215,7 @@ public class VFSListener implements VirtualFileListener {
         if (option.getValue() == VcsShowConfirmationOption.Value.DO_ACTION_SILENTLY) {
           deleteFileViaCheckinEnv(file);
         } else if (option.getValue() == VcsShowConfirmationOption.Value.SHOW_CONFIRMATION) {
-          List<VirtualFile> files = new ArrayList<VirtualFile>();
+          List<VirtualFile> files = new ArrayList<>();
           files.add(file);
 
           AbstractVcsHelper helper = AbstractVcsHelper.getInstance(project);
@@ -221,7 +235,7 @@ public class VFSListener implements VirtualFileListener {
   }
 
   private void deleteFileViaCheckinEnv(VirtualFile file) {
-    List<FilePath> list = new ArrayList<FilePath>();
+    List<FilePath> list = new ArrayList<>();
     FilePath path = VcsContextFactory.SERVICE.getInstance().createFilePathOn(file);
     list.add(path);
 
@@ -237,8 +251,9 @@ public class VFSListener implements VirtualFileListener {
       host.removedFoldersNameMap.put(file, path);
       markSubfolderStructure(path);
       host.removedFolders.add(path);
-    } else if (host.existsFile(path))
+    } else if (host.existsFile(path)) {
       host.removedFiles.add(path);
+    }
   }
 
   /**
@@ -249,13 +264,15 @@ public class VFSListener implements VirtualFileListener {
   private void markSubfolderStructure(String path) {
     for (Iterator<String> it = host.removedFiles.iterator(); it.hasNext(); ) {
       String strFile = it.next();
-      if (strFile.startsWith(path))
+      if (strFile.startsWith(path)) {
         it.remove();
+      }
     }
     for (Iterator<String> it = host.removedFolders.iterator(); it.hasNext(); ) {
       String strFile = it.next();
-      if (strFile.startsWith(path))
+      if (strFile.startsWith(path)) {
         it.remove();
+      }
     }
   }
 

@@ -670,8 +670,9 @@ public class StarteamVcs extends AbstractVcs {
     File f = findFile(file.getPath().replace('/', java.io.File.separatorChar));
     if (f != null) {
       updateStatus(f);
+      return f.getStatus();
     }
-    return f.getStatus();
+    return null;
   }
 
   private static void updateStatus(File f) throws IOException {
