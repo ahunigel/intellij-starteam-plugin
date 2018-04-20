@@ -106,7 +106,8 @@ public abstract class BasicAction extends AnAction {
         return;
       }
 
-      if (action != null && !action.isEnabled(project, activeVcs, file)) {
+      StarteamVcs starteamVcs = ((StarteamVcsAdapter) activeVcs).getStarteamVcs();
+      if (action != null && starteamVcs != null && !action.isEnabled(project, starteamVcs, file)) {
         presentation.setEnabled(false);
         return;
       }
@@ -158,7 +159,7 @@ public abstract class BasicAction extends AnAction {
 
   protected abstract String getActionName();
 
-  protected abstract boolean isEnabled(Project project, AbstractVcs vcs, VirtualFile file);
+  protected abstract boolean isEnabled(Project project, StarteamVcs vcs, VirtualFile file);
 
   protected abstract void perform(Project project, final StarteamVcs activeVcs, VirtualFile file) throws VcsException;
 }

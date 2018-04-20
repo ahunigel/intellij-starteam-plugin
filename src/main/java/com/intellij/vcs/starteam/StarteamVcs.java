@@ -549,6 +549,21 @@ public class StarteamVcs extends AbstractVcs {
     return f;
   }
 
+  public Boolean isLocked(String path) {
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("enter: lockFile(file='" + path + "')");
+    }
+
+    try {
+      File f = getFile(path);
+      return !f.getMyLockType().equals(ViewMember.LockType.UNLOCKED);
+    } catch (VcsException e) {
+      LOG.debug(e);
+    }
+
+    return null;
+  }
+
   public void lockFile(String path) throws VcsException {
     if (LOG.isDebugEnabled()) {
       LOG.debug("enter: lockFile(file='" + path + "')");

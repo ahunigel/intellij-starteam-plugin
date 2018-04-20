@@ -1,7 +1,6 @@
 package com.intellij.vcs.starteam.actions;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vcs.AbstractVcs;
 import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vcs.FileStatusManager;
 import com.intellij.openapi.vcs.VcsException;
@@ -25,7 +24,7 @@ public class AddAction extends BasicAction {
     file.refresh(true, true);
   }
 
-  protected boolean isEnabled(Project project, AbstractVcs vcs, VirtualFile file) {
+  protected boolean isEnabled(Project project, StarteamVcs vcs, VirtualFile file) {
     FileStatus status = FileStatusManager.getInstance(project).getStatus(file);
     return !file.isDirectory() && (status == FileStatus.UNKNOWN);
   }

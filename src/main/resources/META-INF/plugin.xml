@@ -58,7 +58,8 @@
       <add-to-group group-id="VcsGroup" anchor="last"/>
     </group>
 
-    <action id="Starteam.ShowDiffAction" class="com.intellij.vcs.starteam.actions.ShowDiffAction"/>
+    <action id="Starteam.ShowDiffAction" class="com.intellij.vcs.starteam.actions.ShowDiffAction"
+            icon="AllIcons.Diff.Diff"/>
 
     <group id="Starteam.Popup">
       <action id="Starteam.Add" class="com.intellij.vcs.starteam.actions.AddAction" icon="AllIcons.General.Add"/>

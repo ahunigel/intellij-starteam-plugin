@@ -21,7 +21,6 @@ import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vcs.AbstractVcs;
 import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.vcs.starteam.StarteamBundle;
@@ -42,7 +41,7 @@ public class UpdateStatusAction extends BasicAction {
     return "UpdateStatus";
   }
 
-  protected boolean isEnabled(Project project, AbstractVcs vcs, VirtualFile file) {
+  protected boolean isEnabled(Project project, StarteamVcs vcs, VirtualFile file) {
     return true;
   }
 

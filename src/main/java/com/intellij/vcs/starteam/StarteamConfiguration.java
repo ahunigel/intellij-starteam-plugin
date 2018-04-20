@@ -15,7 +15,7 @@ public class StarteamConfiguration extends AbstractProjectComponent implements J
   public String VIEW = "";
   public String ALTERNATIVE_WORKING_PATH = "";
   public boolean LOCK_ON_CHECKOUT = false;
-  public boolean UNLOCK_ON_CHECKIN = false;
+  public boolean UNLOCK_ON_CHECKIN = true;
   public boolean ENABLE_CACHE_AGENT = false;
   public String CACHE_AGENT_SERVER = "";
   public Integer CACHE_AGENT_PORT = 5201;

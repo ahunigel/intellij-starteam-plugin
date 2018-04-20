@@ -1,27 +1,26 @@
 package com.intellij.vcs.starteam;
 
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vcs.DefaultRepositoryLocation;
 import com.intellij.openapi.vcs.RepositoryLocation;
 import com.intellij.openapi.vcs.VcsException;
 import com.intellij.openapi.vcs.history.VcsFileRevision;
 import com.intellij.openapi.vcs.history.VcsRevisionNumber;
-import com.starteam.CheckoutManager;
 import com.starteam.File;
 import com.starteam.User;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.Date;
 
 /**
  * Created by Nigel.Zheng on 4/19/2018.
  */
 public class StarteamFileRevision implements VcsFileRevision {
+  private final StarteamVcs host;
   private final File file;
   private byte[] contents = null;
 
-  public StarteamFileRevision(File file) {
+  public StarteamFileRevision(StarteamVcs host, File file) {
+    this.host = host;
     this.file = file;
   }
 
@@ -60,22 +59,9 @@ public class StarteamFileRevision implements VcsFileRevision {
   }
 
   public byte[] loadContent() throws VcsException {
-    if (file instanceof File && contents == null) {
-      try {
-        File stFile = file;
-        CheckoutManager mgr = stFile.getView().createCheckoutManager();
-        java.io.File file = new java.io.File(
-            FileUtil.getTempDirectory() + java.io.File.separator + Long.toString(System.currentTimeMillis()) + stFile.getName());
-//          stFile.checkoutTo(file, Item.LockType.UNCHANGED, true, true, false);
-        mgr.checkoutTo(stFile, file);
-        if (mgr.canCommit()) {
-          mgr.commit();
-        }
-        contents = FileUtil.loadFileBytes(file);
-        return contents;
-      } catch (IOException e) {
-        throw new VcsException(e);
-      }
+    if (file != null && contents == null) {
+      contents = host.getFileContent(file);
+      return contents;
     }
     return new byte[0];
   }
@@ -89,6 +75,10 @@ public class StarteamFileRevision implements VcsFileRevision {
   }
 
   public String getPresentableName() {
+    return getDotNotation();
+  }
+
+  public String getDotNotation() {
     return file.getDotNotation().toString();
   }
 }

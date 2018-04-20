@@ -8,7 +8,6 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
-import com.intellij.openapi.vcs.AbstractVcs;
 import com.intellij.openapi.vcs.FileStatus;
 import com.intellij.openapi.vcs.FileStatusManager;
 import com.intellij.openapi.vcs.VcsException;
@@ -82,7 +81,7 @@ public class ShowDiffAction extends BasicAction {
     }
   }
 
-  protected boolean isEnabled(Project project, AbstractVcs vcs, VirtualFile file) {
+  protected boolean isEnabled(Project project, StarteamVcs vcs, VirtualFile file) {
     return !file.isDirectory() && FileStatusManager.getInstance(project).getStatus(file) != FileStatus.ADDED;
   }
 

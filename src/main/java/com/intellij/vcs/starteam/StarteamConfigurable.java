@@ -17,8 +17,6 @@ import com.starteam.View;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +51,7 @@ public class StarteamConfigurable implements Configurable {
     myProject = project;
   }
 
+  @Override
   public void disposeUIResources() {
     myPanel = null;
   }
@@ -62,6 +61,7 @@ public class StarteamConfigurable implements Configurable {
     return null;
   }
 
+  @Override
   public String getHelpTopic() {
     return "project.propStarteam";
   }
@@ -71,29 +71,15 @@ public class StarteamConfigurable implements Configurable {
   }
 
   public JComponent createComponent() {
-    myFldProject.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        selectProject();
-      }
-    });
-    myFldView.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        selectView();
-      }
-    });
-    myFldWorkingPath.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        selectWorkingPath();
-      }
-    });
-    myBtnTest.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        final View view = getView();
+    myFldProject.addActionListener(e -> selectProject());
+    myFldView.addActionListener(e -> selectView());
+    myFldWorkingPath.addActionListener(e -> selectWorkingPath());
+    myBtnTest.addActionListener(e -> {
+      final View view = getView();
 
-        if (view != null) {
-          Messages.showMessageDialog(myPanel, StarteamBundle.message("message.text.connection.successful"),
-              StarteamBundle.message("text.test.connection"), Messages.getInformationIcon());
-        }
+      if (view != null) {
+        Messages.showMessageDialog(myPanel, StarteamBundle.message("message.text.connection.successful"),
+            StarteamBundle.message("text.test.connection"), Messages.getInformationIcon());
       }
     });
     return myPanel;
@@ -102,13 +88,17 @@ public class StarteamConfigurable implements Configurable {
   @Nullable
   private View getView() {
     final Project project = getProject();
-    if (project == null) return null;
+    if (project == null) {
+      return null;
+    }
 
     final View[] views = project.getViews();
     String name = myFldView.getText();
 
     for (View view : views) {
-      if (view.getName().equals(name)) return view;
+      if (view.getName().equals(name)) {
+        return view;
+      }
     }
 
     Messages.showMessageDialog(myPanel, StarteamBundle.message("message.text.configuration.cannot.find.view"),
@@ -118,7 +108,9 @@ public class StarteamConfigurable implements Configurable {
 
   private void selectView() {
     Project project = getProject();
-    if (project == null) return;
+    if (project == null) {
+      return;
+    }
 
     final View[] views = project.getViews();
     if (views.length == 0) {
@@ -134,26 +126,32 @@ public class StarteamConfigurable implements Configurable {
       names[i] = view.getName();
     }
 
-    ArrayList<String> nameList = new ArrayList<String>(Arrays.asList(names));
+    ArrayList<String> nameList = new ArrayList<>(Arrays.asList(names));
     Collections.sort(nameList);
     String[] sortedNames = ArrayUtil.toStringArray(nameList);
 
     final int i = Messages.showChooseDialog(myPanel, StarteamBundle.message("request.text.configuration.select.view"),
         StarteamBundle.message("request.title.configuration.select.view"), sortedNames, sortedNames[0], Messages.getQuestionIcon());
-    if (i < 0) return;
+    if (i < 0) {
+      return;
+    }
     myFldView.setText(sortedNames[i]);
   }
 
   @Nullable
   private Project getProject() {
     Server server = getServer();
-    if (server == null) return null;
+    if (server == null) {
+      return null;
+    }
 
     final Project[] projects = server.getProjects();
     String name = myFldProject.getText();
 
     for (Project project : projects) {
-      if (project.getName().equals(name)) return project;
+      if (project.getName().equals(name)) {
+        return project;
+      }
     }
 
     Messages.showMessageDialog(myPanel, StarteamBundle.message("message.text.configuration.error.cannot.find.project"), StarteamBundle.message("message.title.configuration.error"), Messages.getErrorIcon());
@@ -162,7 +160,9 @@ public class StarteamConfigurable implements Configurable {
 
   private void selectProject() {
     Server server = getServer();
-    if (server == null) return;
+    if (server == null) {
+      return;
+    }
 
     try {
       final Project[] projects = server.getProjects();
@@ -178,7 +178,7 @@ public class StarteamConfigurable implements Configurable {
         names[i] = project.getName();
       }
 
-      ArrayList<String> nameList = new ArrayList<String>(Arrays.asList(names));
+      ArrayList<String> nameList = new ArrayList<>(Arrays.asList(names));
       Collections.sort(nameList);
 
       String[] sortedNames = ArrayUtil.toStringArray(nameList);
@@ -189,7 +189,9 @@ public class StarteamConfigurable implements Configurable {
               StarteamBundle.message("request.text.title.select.project"),
               sortedNames, sortedNames[0], Messages.getQuestionIcon());
 
-      if (i < 0) return;
+      if (i < 0) {
+        return;
+      }
 
       myFldProject.setText(sortedNames[i]);
     } finally {
@@ -225,12 +227,9 @@ public class StarteamConfigurable implements Configurable {
       Server server = new Server(myFldServer.getText(), Integer.parseInt(myFldPort.getText()));
 
       server.logOn(myFldUser.getText(), new String(myFldPassword.getPassword()));
-      if(server.isMPXAvailable()){
-        server.enableMPX();
-      }
       if (myCheckEnableCacheAgent.isSelected()) {
-        CacheAgent agent = server.locateCacheAgent(cacheAgentServer.getText(), Integer.parseInt(cacheAgentPort.getText()));
         server.getServerInfo().setEnableCacheAgentForFileContent(true);
+        CacheAgent agent = server.locateCacheAgent(cacheAgentServer.getText(), Integer.parseInt(cacheAgentPort.getText()));
       }
       return server;
     } catch (NumberFormatException e) {
@@ -247,6 +246,7 @@ public class StarteamConfigurable implements Configurable {
     }
   }
 
+  @Override
   public void reset() {
     StarteamConfiguration configuration = myProject.getComponent(StarteamConfiguration.class);
 
@@ -289,9 +289,9 @@ public class StarteamConfigurable implements Configurable {
       //  Otherwise we need to tell our host to reconnect to the server with
       //  new parameters.
       View view = getView();
-      if (view == null)
+      if (view == null) {
         throw new ConfigurationException(StarteamBundle.message("message.title.configuration.error"));
-      else {
+      } else {
         StarteamVcsAdapter host = myProject.getComponent(StarteamVcsAdapter.class);
         try {
           host.doShutdown();

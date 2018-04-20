@@ -59,7 +59,7 @@ public class StarteamHistoryProvider implements VcsHistoryProvider {
 
   @Nullable
   public DiffFromHistoryHandler getHistoryDiffHandler() {
-    return null;
+    return new StandardDiffFromHistoryHandler();
   }
 
   public boolean canShowHistoryFor(@NotNull VirtualFile virtualFile) {
@@ -68,7 +68,8 @@ public class StarteamHistoryProvider implements VcsHistoryProvider {
   }
 
   public VcsDependentHistoryComponents getUICustomization(final VcsHistorySession session, JComponent forShortcutRegistration) {
-    return VcsDependentHistoryComponents.createOnlyColumns(ColumnInfo.EMPTY_ARRAY);
+    ColumnInfo[] additionalColumns = new ColumnInfo[]{new DotNotationColumnInfo()};
+    return VcsDependentHistoryComponents.createOnlyColumns(additionalColumns);
   }
 
   public AnAction[] getAdditionalActions(final Runnable refresher) {
@@ -93,7 +94,7 @@ public class StarteamHistoryProvider implements VcsHistoryProvider {
 
       for (int i = 0; i < viewMemberCollection.size(); i++) {
         ViewMember viewMember = viewMemberCollection.getAt(i);
-        VcsFileRevision rev = new StarteamFileRevision((File) viewMember);
+        VcsFileRevision rev = new StarteamFileRevision(host, (File) viewMember);
         revisions.add(rev);
       }
       return new StarteamHistorySession(revisions, file);
@@ -109,11 +110,7 @@ public class StarteamHistoryProvider implements VcsHistoryProvider {
 
   private static VcsRevisionNumber getCurrentRevisionNum(File file) {
     try {
-      ViewMemberCollection items = file.getHistory();
-      if (!items.isEmpty()) {
-        ViewMember viewMember = items.getAt(items.size() - 1);
-        return new VcsRevisionNumber.Int(file.getContentVersion());
-      }
+      return new VcsRevisionNumber.Int(file.getSyncContentVersion());
     } catch (Exception e) {
       //  We can catch e.g. com.starbase.starteam.ItemNotFoundException if we
       //  try to show history records for the deleted file.
@@ -125,7 +122,7 @@ public class StarteamHistoryProvider implements VcsHistoryProvider {
     private final File file;
 
     public StarteamHistorySession(List<VcsFileRevision> revisions, File file) {
-      super(revisions, new VcsRevisionNumber.Int(file.getContentVersion()));
+      super(revisions, new VcsRevisionNumber.Int(file.getSyncContentVersion()));
       this.file = file;
     }
 
@@ -144,5 +141,16 @@ public class StarteamHistoryProvider implements VcsHistoryProvider {
     }
   }
 
+  private class DotNotationColumnInfo extends ColumnInfo<StarteamFileRevision, String> {
+    public DotNotationColumnInfo() {
+      super(StarteamBundle.message("column.name.revision.list.dot.notation"));
+    }
+
+    @Nullable
+    @Override
+    public String valueOf(StarteamFileRevision starteamFileRevision) {
+      return starteamFileRevision.getDotNotation();
+    }
+  }
 }
 
