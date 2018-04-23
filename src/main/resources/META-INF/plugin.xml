@@ -51,10 +51,12 @@
   </application-components>
 
   <actions>
-    <group id="StarteamGlobalGroup" class="com.intellij.vcs.starteam.actions.StarteamGroup" popup="true">
+    <group id="StarteamGlobalGroup" class="com.intellij.vcs.starteam.actions.StarteamGroup" popup="true"
+           icon="/icons/starTeam.png">
       <add-to-group group-id="VcsGroups" anchor="last"/>
     </group>
-    <group id="StarteamFilePopupGroup" class="com.intellij.vcs.starteam.actions.StarteamGroup" popup="true">
+    <group id="StarteamFilePopupGroup" class="com.intellij.vcs.starteam.actions.StarteamGroup" popup="true"
+           icon="/icons/starTeam.png">
       <add-to-group group-id="VcsGroup" anchor="last"/>
     </group>
 

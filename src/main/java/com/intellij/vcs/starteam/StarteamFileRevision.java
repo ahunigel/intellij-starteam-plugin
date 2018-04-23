@@ -74,10 +74,6 @@ public class StarteamFileRevision implements VcsFileRevision {
     return getRevisionDate().compareTo(((VcsFileRevision) revision).getRevisionDate());
   }
 
-  public String getPresentableName() {
-    return getDotNotation();
-  }
-
   public String getDotNotation() {
     return file.getDotNotation().toString();
   }
