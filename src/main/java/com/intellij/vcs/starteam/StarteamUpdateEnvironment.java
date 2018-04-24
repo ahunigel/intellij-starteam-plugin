@@ -131,9 +131,7 @@ public class StarteamUpdateEnvironment implements UpdateEnvironment {
       } else if (status == File.Status.OUT_OF_DATE) {
         host.checkoutFile(file, false);
         groups.getGroupById(FileGroup.UPDATED_ID).add(file.getFullName(), vcsKey, null);
-      } else if (status == File.Status.MODIFIED) {
-        groups.getGroupById(FileGroup.MODIFIED_ID).add(file.getFullName(), vcsKey, null);
-      } else if (status == File.Status.UNKNOWN) {
+      } else if (status == File.Status.MODIFIED || status == File.Status.UNKNOWN) {
         groups.getGroupById(FileGroup.SKIPPED_ID).add(file.getFullName(), vcsKey, null);
       } else if (status == File.Status.NEW) {
         groups.getGroupById(FileGroup.LOCALLY_ADDED_ID).add(file.getFullName(), vcsKey, null);

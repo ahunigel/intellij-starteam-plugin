@@ -549,6 +549,11 @@ public class StarteamVcs extends AbstractVcs {
     return f;
   }
 
+  public void ignoreFile(File file) {
+    checkinManager.ignore(file);
+    checkoutManager.ignore(file);
+  }
+
   public Boolean isLocked(String path) {
     if (LOG.isDebugEnabled()) {
       LOG.debug("enter: lockFile(file='" + path + "')");
