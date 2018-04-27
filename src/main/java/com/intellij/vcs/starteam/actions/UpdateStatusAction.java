@@ -49,8 +49,10 @@ public class UpdateStatusAction extends BasicAction {
     try {
       activeVcs.refresh();
       File.Status status = activeVcs.updateStatus(file);
-      Notifications.Bus.notify(new Notification(activeVcs.getDisplayName(), "Update Status",
-          file.getName() + " status is " + status.getDisplayName(), NotificationType.INFORMATION));
+      if (status != null) {
+        Notifications.Bus.notify(new Notification(activeVcs.getDisplayName(), "Update Status",
+            file.getName() + " status is " + status.getDisplayName(), NotificationType.INFORMATION));
+      }
     } catch (VcsException | IOException ex) {
       Messages.showMessageDialog(project, ex.getMessage(), StarteamBundle.message("message.title.action.error"), Messages.getErrorIcon());
     }
